@@ -1,0 +1,23 @@
+{
+    "test": "test en",
+    "lang_changed": "bot is now in english",
+    "invalid_lang" : "invalid lang, please type the 2 first letters of the language you want to choose",
+    "prefix_changed": "prefix is now '${this.w}'",
+    "roles_set": "roles have been updated",
+    "invalid_roles": "these roles are invalid:\n${this.w}\nroles haven't been updated",
+    "chan_added" : "channel '${this.w}' has been added to the settings",
+    "chan_created" : "channel '${this.w}' has been created and added to the settings",
+    "invalid_chan" : "channel '${this.w}' doesn't exists and can't be created",
+    "paramBoolSet": "this choice has been saved",
+
+    "langPrompt" : "please select the bot language between theses:\nen(glish), fr(ançais)",
+    "prefixPrompt" : "choose the prefix for calling the bot\nex: 'py'",
+    "adminRolePrompt": "type the roles that will have the rights to modify the bot settings\n separate them with ','. ex: 'adminInChief, moderatorSquad'\nplease don't put ',' characters in your roles names!",
+    "modRolePrompt": "type the roles that will be moderators in your voice channel\n separate them with ','. ex: 'adminInChief, moderatorSquad'\nplease don't put ',' characters in your roles names!",
+    "vocChanPrompt" : "type the name of the voice chan where you want the bot to be active\n ex: '#vocalDebate'",
+    "botChanPrompt": "type the name of the chan where the bot will send messages, like the waitlist\n the channel will be created if it doesn't exist yet\n ex: 'debate_bot'",
+    "rateSpeakerPrompt": "do you want to allow the public to review a speaker after his speech? \ny(es) or n(o)",
+    "topSpeakerPrompt": "do you want a command showing the list of the most active speakers of your server?\ny(es) or n(o)",
+    "endedInit": "the configuration is now finished, you can use the bot!",
+    "deletingTable": "Goodbye Dave..."
+}

@@ -1,0 +1,23 @@
+{
+    "test": "test fr",
+    "lang_changed": "le bot est maintenant en français.",
+    "invalid_lang" : "langue invalide, tapez les 2 premières lettres de la langue que vous souhaitez",
+    "prefix_changed": "le préfixe est maintenant '${this.w}'",
+    "roles_set": "les rôles ont été mis à jour",
+    "invalid_roles": "les rôles suivants sont invalides:\n${this.w}\nles rôles n'ont pas été mis à jour",
+    "chan_added" : "le channel '${this.w}' a bien été ajouté aux paramètres",
+    "chan_created" : "le channel '${this.w}' a bien été crée et ajouté aux paramètres",
+    "invalid_chan" : "le channel '${this.w}' n'existe pas et ne peut être crée",
+    "paramBoolSet": "ce choix a été sauvegardé",
+
+    "langPrompt" : "veuillez choisir la langue du bot  parmis celles çi:\nfr(ançais), en(glish)",
+    "prefixPrompt" : "choisissez le préfixe pour appeler le bot \nex: 'py'",
+    "adminRolePrompt": "tapez les rôles qui pourront modifier les paramètres du bot\n séparez les avec ',',. ex: 'adminAutogéré, modoDuSwag'\n ne mettez pas de virgules dans vos noms de rôles svp!",
+    "modRolePrompt": "tapez les rôles qui seront modérateurs dans vos channels vocaux\n séparez les avec ',',. ex: 'adminAutogéré, modoDuSwag'\n ne mettez pas de virgules dans vos noms de rôles svp!",
+    "vocChanPrompt" : "tapez le nom du channel vocal que le bot va surveiller \n ex: '#vocalDebat'",
+    "botChanPrompt": "tapez le nom du channel ou le bot enverra ces messages, comme la file d'attente\n Le channel va etre crée si il n'existe pas encore\n ex: 'bot_du_débat'",
+    "rateSpeakerPrompt": "Voulez vous que le public puisse donner un avis sur un orateur après être passé à l'antenne? \no(ui) ou n(on)",
+    "topSpeakerPrompt": "Voulez vous une commande pour lister les personnes les plus actives sur le channel vocal?\no(ui) ou n(on)",
+    "endedInit": "la configuration est maintenant finie, vous pouvez utiliser le bot!",
+    "deletingTable": "Au revoir Dave..."
+}
