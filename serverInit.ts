@@ -1,57 +1,79 @@
-const Discord = require("discord.js");
+import SQLite from "better-sqlite3";
+import Discord from "discord.js";
+
 const Utils = require("./utils.js");
+
 const langTable = {
     fr: require('./localization/fr.json'),
     en: require('./localization/en.json')
 };
 
 class ServerInit {
+    public sql!: SQLite;
+    public guild!: Discord.Guild;
+    public id!: Number;
+    public name!: string;
+    public prefix!: string;
+    public lang!: LocStrings;
+    public admRoles!: Array<Number>;
+    public modRoles!: Array<Number>;
+    public vocChan!: Number;
+    public botChan!: Number;
+    public rateSpeaker!: Boolean;
+    public topSpeaker!: Boolean;
 
-    _setDefaultConstructorVars() {
-        this.usersTalking = {};
-        this.waitList = [];
-        this.waitListMessageId = -1;
+    private langName: string = "en";
+
+    private statTotComm: Number = 0;
+    private statMaxWaitlist: Number = 0;
+    private init: Boolean = false;
+
+
+    //todo: what do I do with these?
+    private usersTalking = {};
+    private waitList = [];
+    private waitListMessageId: Number = -1;
+
+
+    constructor(sql: SQLite, guild: Discord.Guild, prefix: string, lang: string,
+                admRoles: Array<Number>, modRoles: Array<Number>, vocChan: Number,
+                botChan: Number, rateSpeaker: Boolean, topSpeaker: Boolean) {
+        this._constructorRecallable(sql, guild, prefix, lang, admRoles, modRoles, vocChan, botChan, rateSpeaker, topSpeaker)
     }
 
-    constructor(sql, guild, prefix, lang, admRoles, modRoles, vocChans, botChan, rateSpeaker, topSpeaker) {
-        this._constructorRecallable(sql, guild, prefix, lang, admRoles, modRoles, vocChans, botChan, rateSpeaker, topSpeaker)
-    }
 
-
-    _constructorRecallable(sql, guild, prefix, lang, admRoles, modRoles, vocChans, botChan, rateSpeaker, topSpeaker) {
+    _constructorRecallable(sql: SQLite, guild: Discord.Guild, prefix: string, lang: string,
+                           admRoles: Array<Number>, modRoles: Array<Number>, vocChan: Number,
+                           botChan: Number, rateSpeaker: Boolean, topSpeaker: Boolean) {
         this.sql = sql;
         this.guild = guild;
-        this.id = guild.id;
+        this.id = Number(guild.id);
         this.name = guild.name;
         this.lang = langTable.en;
-        this._langName = "en";
 
         if (prefix === undefined)
             return (this._constructorWithDB(sql));
 
-        var command = sql.prepare("INSERT INTO servers VALUES(?, ?, ?, ?, ?, ?, ?, ?, ? , ?, 0, 0, 0);");
-        command.run(guild.id, guild.name, prefix, lang, admRoles.toString(), modRoles.toString(), vocChans.toString(), botChan.toString(), rateSpeaker ? 1 : 0, topSpeaker ? 1 : 0);
+        const command = sql.prepare("INSERT INTO servers VALUES(?, ?, ?, ?, ?, ?, ?, ?, ? , ?, 0, 0, 0);");
+        command.run(guild.id, guild.name, prefix, lang, admRoles.toString(), modRoles.toString(),
+            vocChan.toString(), botChan.toString(), rateSpeaker ? 1 : 0, topSpeaker ? 1 : 0);
 
 
         this.prefix = prefix;
 
-        if (typeof lang === 'string' || lang instanceof String)
-            this.lang = langTable[lang];
+        this.lang = langTable[lang];
         this.admRoles = admRoles;
         this.modRoles = modRoles;
-        this.vocChans = vocChans;
+        this.vocChan = vocChan;
         this.botChan = botChan;
         this.rateSpeaker = rateSpeaker;
         this.topSpeaker = topSpeaker;
-        this.statTotComm = 0;
-        this.statMaxWaitlist = 0;
         this.init = true;
-        this._setDefaultConstructorVars()
     }
 
-    _constructorWithDB(sql) {
-        var command = sql.prepare("SELECT * FROM servers WHERE (id=?);");
-        var res = command.get(this.id);
+    _constructorWithDB(sql: SQLite) {
+        const command = sql.prepare("SELECT * FROM servers WHERE (id=?);");
+        let res = command.get(this.id);
 
         if (!res) {
             this.init = false;
@@ -62,31 +84,26 @@ class ServerInit {
         this.lang = langTable[res.lang];
         this.admRoles = res.admRoles.split(',').map(Number);
         this.modRoles = res.modRoles.split(',').map(Number);
-        this.vocChans = parseInt(res.vocChans); //res.vocChans.split(',').map(Number);
+        this.vocChan = parseInt(res.vocChan); //res.vocChan.split(',').map(Number);
         this.botChan = parseInt(res.botChan);
         this.rateSpeaker = res.rateSpeaker == true;
         this.topSpeaker = res.topSpeaker == true;
         this.statTotComm = res.statTotComm;
         this.statMaxWaitlist = res.statMaxWaitlist;
         this.init = true;
-        this._setDefaultConstructorVars()
     }
 
-    _constructorNotInitialized() {
-
-    }
-
-    _updateDB(name, val) {
+    _updateDB(name: string, val: string) {
         if (!this.init)
             return;
-        var command = sql.prepare("UPDATE servers SET ? = ? WHERE (id=?);");
+        const command = this.sql.prepare("UPDATE servers SET ? = ? WHERE (id=?);");
         command.run(name, val, this.id);
     }
 
-    setLang(str, chan) {
+    setLang(str: string, chan: Discord.DMChannel) {
         if (langTable.hasOwnProperty(str)) {
             this.lang = langTable[str];
-            this._langName = str;
+            this.langName = str;
             this._updateDB("lang", str);
             chan.send(this.lang.lang_changed);
             return true;
@@ -97,20 +114,20 @@ class ServerInit {
         }
     }
 
-    setPrefix(str, chan) {
+    setPrefix(str: string, chan: Discord.DMChannel) {
         this.prefix = str;
         this._updateDB("prefix", str);
         chan.send(Utils.fillTemplateString(this.lang.prefix_changed, {w: str}));
         return true;
     }
 
-    _setRoles(str, chan, nameRole) {
-        var roles = str.split(',').map(String);
-        var errorRoles = [];
-        var finalRoles = [];
+    _setRoles(str: string, chan: Discord.DMChannel, nameRole: string) {
+        const roles = str.split(',').map(String);
+        let errorRoles: Array<string> = [];
+        let finalRoles: Array<string> = [];
 
         roles.forEach((r) => {
-            var nr = this.guild.roles.find("name", r.trim());
+            let nr = this.guild.roles.find("name", r.trim());
             if (nr)
                 finalRoles.push(nr.id);
             else
@@ -129,15 +146,15 @@ class ServerInit {
         }
     }
 
-    setAdminRoles(str, chan) {
+    setAdminRoles(str: string, chan: Discord.DMChannel) {
         return this._setRoles(str, chan, "admRoles");
     }
 
-    setModRoles(str, chan) {
+    setModRoles(str: string, chan: Discord.DMChannel) {
         return this._setRoles(str, chan, "modRoles");
     }
 
-    _setChan(str, chan, nameVar, type, createChan) {
+    _setChan(str: string, chan: Discord.DMChannel, nameVar: string, type: 'text' | 'voice', createChan: Boolean) {
         if (str.startsWith('#'))
             str = str.substr(1);
         var nc = this.guild.channels.find("name", str.trim());
@@ -148,17 +165,17 @@ class ServerInit {
             return true;
         }
         else {
-            if (createChan && this.guild.me.hasPermission(Discord.Permissions.FLAGS.MANAGE_CHANNELS)) {
-                var that = this;
+            if (createChan && this.guild.me.hasPermission(Discord.Permissions.FLAGS.MANAGE_CHANNELS!)) {
+                const that = this;
                 this.guild.createChannel(str, type)
-                    .then(function (chanCreated) {
-                            this[nameVar] = chanCreated.id;
+                    .then(function (chanCreated: Discord.Channel) {
+                            that[nameVar] = chanCreated.id;
                             that._updateDB(nameVar, chanCreated.id);
-                            chan.send(Utils.fillTemplateString(this.lang.chan_created, {w: str}));
+                            chan.send(Utils.fillTemplateString(that.lang.chan_created, {w: str}));
                             return true;
                         }
                     )
-                    .catch(function (error) {
+                    .catch(function (error: any) {
                         chan.send(Utils.fillTemplateString(that.lang.invalid_chan, {w: str}));
                         return false;
                     });
@@ -170,33 +187,33 @@ class ServerInit {
         }
     }
 
-    async setVocChan(str, chan) {
-        return await this._setChan(str, chan, "vocChans", "voice", false)
+    async setVocChan(str: string, chan: Discord.DMChannel) {
+        return await this._setChan(str, chan, "vocChan", "voice", false)
     }
 
-    async setBotChan(str, chan) {
+    async setBotChan(str: string, chan: Discord.DMChannel) {
         return await this._setChan(str.toLowerCase(), chan, "botChan", "text", true)
     }
 
 
-    _setBooleanVote(str, chan, nameVar) {
+    _setBooleanVote(str: string, chan: Discord.DMChannel, nameVar: string) {
         this[nameVar] = (str.startsWith('y') || str.startsWith('o'));
         this._updateDB(nameVar, this[nameVar]);
         chan.send(this.lang.paramBoolSet);
         return true;
     }
 
-    setRateSpeaker(str, chan) {
+    setRateSpeaker(str: string, chan: Discord.DMChannel) {
         return this._setBooleanVote(str, chan, "rateSpeaker");
     }
 
-    setTopSpeaker(str, chan) {
+    setTopSpeaker(str: string, chan: Discord.DMChannel) {
         return this._setBooleanVote(str, chan, "topSpeaker");
     }
 
     completeInit() {
-        this._constructorRecallable(this.sql, this.guild, this.prefix, this._langName, this.admRoles, this.modRoles,
-            this.vocChans, this.botChan, this.rateSpeaker, this.topSpeaker);
+        this._constructorRecallable(this.sql, this.guild, this.prefix, this.langName, this.admRoles, this.modRoles,
+            this.vocChan, this.botChan, this.rateSpeaker, this.topSpeaker);
     }
 }
 

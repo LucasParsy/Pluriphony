@@ -4,7 +4,7 @@ var fs = require('fs');
 const SQLite = require("better-sqlite3");
 
 const dbUtils = require('./database.js');
-const Server = require('./server.js');
+const Server = require('./server.ts');
 
 
 const tableName = './db/unitTest-table.sqlite';
@@ -50,7 +50,7 @@ assert(dbUtils.isServerInDB(42, sql));
 
 var sameServer = new Server(sql, guild);
 assert.equal(sameServer.id, 42);
-//assert(Array.isArray(sameServer.vocChans));
+//assert(Array.isArray(sameServer.vocChan));
 assert.equal(sameServer.vocChans, 5);
 assert.equal(sameServer.botChan, 7);
 assert.equal(sameServer.topSpeaker, true);

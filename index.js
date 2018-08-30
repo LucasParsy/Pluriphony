@@ -4,7 +4,7 @@ const token = require('./token.json').token;
 
 const Utils = require("./utils.js");
 const dbUtils = require('./database.js');
-const Server = require('./server.js');
+const Server = require('./server.ts');
 const initMethods = require('./init.js');
 
 const SQLite = require("better-sqlite3");

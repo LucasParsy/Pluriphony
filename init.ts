@@ -1,11 +1,14 @@
 const Server = require('./server.js');
+import SQLite from "better-sqlite3";
+import Discord, {DMChannel} from "discord.js";
+
 
 var userCollected: Array<number> = [];
 
 module.exports =
     {
-        addUserToInit: function (msg: any, sql: any, guilds: Map<number, any>) {
-            msg.author.createDM().then((channel: any) => {
+        addUserToInit: function (msg: Discord.Message, sql: SQLite, guilds: Map<number, any>) {
+            msg.author.createDM().then((channel: DMChannel) => {
                 const filter = (m: any) => {
                     return !m.author.bot
                 };

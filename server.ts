@@ -1,10 +1,15 @@
+import SQLite from "better-sqlite3";
+import Discord from "discord.js";
+
+
 const ServerInit = require('./serverInit.js');
 const dbUtils = require('./database.js');
 
+class PyGuild extends ServerInit {
 
-class Server extends ServerInit {
-
-    constructor(sql, guild, prefix, lang, admRoles, modRoles, vocChans, botChan, rateSpeaker, topSpeaker) {
+    constructor(sql: SQLite, guild: Discord.Guild, prefix: String, lang: String,
+                admRoles: Array<Number>, modRoles: Array<Number>, vocChans: Array<Number>,
+                botChan: Number, rateSpeaker: Boolean, topSpeaker: Boolean) {
         super(sql, guild, prefix, lang, admRoles, modRoles, vocChans, botChan, rateSpeaker, topSpeaker);
     }
 
