@@ -14,7 +14,7 @@ function createSingleTable(parameters: { name: string, command: string, sql: any
 }
 
 
-var methods = {
+const methods = {
 
     createTables: function (sql: any) {
         console.log("creating tables");

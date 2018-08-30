@@ -6,11 +6,10 @@ sudo apt-get install build-essential
 sudo apt-get install python2.7
 //sudo apt-get install sqlite3
 sudo npm install -g node-gyp
-mkdir db
-
 sudo npm install -g typescript
 tsc --init
 
+mkdir db
 npm run
 
 //npm install uws --save

@@ -2,14 +2,16 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const token = require('./token.json').token;
 
+const Utils = require("./utils.js");
 const dbUtils = require('./database.js');
 const Server = require('./server.js');
 const initMethods = require('./init.js');
 
 const SQLite = require("better-sqlite3");
 const sql = new SQLite('./db/table.sqlite');
+const Poll = require("./Poll.js");
 
-guilds = new Map();
+var guilds = new Map();
 
 //var boolToSQLInt = (b) =>  b ? 1 : 0;
 //var SQLIntToBool = (i) =>  i === 1;
@@ -66,6 +68,28 @@ function getLetterEmoji(letter) {
     return (":regional_indicator_" + String.fromCharCode(97 + letter) + ":")
 }
 
+
+var adminCommands = {
+    command_create_poll: Poll.createPoll,
+    command_suppr_poll_choice: Poll.removeChoicePoll,
+};
+
+var usersCommands = {
+    command_add_poll_choice: Poll.addChoicePoll,
+};
+
+function showInvalidRightsCommand(command, msg, guild) {
+    var str = Utils.fillTemplateString(guild.lang.command_admin_reserved, {w: command});
+    Utils.showMessageAndDelete(msg, str);
+}
+
+function showInvalidCommand(command, msg, guild) {
+    var str = Utils.fillTemplateString(guild.lang.command_not_found, {w: command});
+    //todo: str += la string d'aide générale, bien longue.
+    Utils.showMessageAndDelete(msg, str);
+}
+
+
 client.on('message', msg => {
         if (msg.guild) {
             //console.log(msg.guild.roles.find("name", "notExisting"));
@@ -74,17 +98,32 @@ client.on('message', msg => {
             if (guilds.has(msg.guild.id)) {
                 if (!msg.content.startsWith(guilds.get(msg.guild.id).prefix))
                     return;
-                var guild = guilds.get(msg.guild.id);
-                msg.content.substring(guild.prefix.length);
+                const guild = guilds.get(msg.guild.id);
+                const command = msg.content.substring(guild.prefix.length).trim();
+                //commands are localized: get the command title
+                const commandArray = command.split(" ");
+                const CommandName = commandArray[0];
+                const title = Utils.getKeyByValue(guild.lang, CommandName);
+                if (title === undefined)
+                    return showInvalidCommand(CommandName, msg, guild);
+                if (adminCommands.hasOwnProperty(title)) {
+                    if (!(msg.member && msg.member.hasPermission(Discord.Permissions.FLAGS.MANAGE_GUILD)) &&
+                        !(msg.member && Utils.userHasRole(guild.admRoles, msg.member.roles.values())))
+                        return showInvalidRightsCommand(CommandName, msg, guild);
+                    adminCommands[title](commandArray.slice(1), msg, sql);
+                    return;
+                }
+
+                if (!usersCommands.hasOwnProperty(title))
+                    return showInvalidCommand(CommandName, msg, guild);
+                usersCommands[title](commandArray.slice(1), msg, sql);
             }
+
             else if ((msg.content).replace(/ /g, '') === "pyconfigure" &&
                 msg.member && msg.member.hasPermission(Discord.Permissions.FLAGS.MANAGE_GUILD)) {
                 initMethods.addUserToInit(msg, sql, guilds);
             }
 
-            if (msg.content === 'ping') {
-                msg.reply('pong');
-            }
 
             /*
             if (msg.content.startsWith("startPoll")) {

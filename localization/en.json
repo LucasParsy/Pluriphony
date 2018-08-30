@@ -19,5 +19,13 @@
     "rateSpeakerPrompt": "do you want to allow the public to review a speaker after his speech? \ny(es) or n(o)",
     "topSpeakerPrompt": "do you want a command showing the list of the most active speakers of your server?\ny(es) or n(o)",
     "endedInit": "the configuration is now finished, you can use the bot!",
-    "deletingTable": "Goodbye Dave..."
+    "deletingTable": "Goodbye Dave...",
+
+    "command_admin_reserved": "command '${this.w}' is reserved to bot admins",
+    "command_not_found": "command '${this.w}' doesn't exists",
+
+    "command_create_poll": "poll",
+    "command_add_poll_choice": "addPollChoice",
+    "command_suppr_poll_choice": "delPollChoice"
+
 }

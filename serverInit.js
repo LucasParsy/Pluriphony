@@ -1,14 +1,11 @@
 const Discord = require("discord.js");
+const Utils = require("./utils.js");
 const langTable = {
     fr: require('./localization/fr.json'),
     en: require('./localization/en.json')
 };
 
 class ServerInit {
-
-    _fillTemplateString(templateString, templateVars) {
-        return new Function("return `" + templateString + "`;").call(templateVars);
-    };
 
     _setDefaultConstructorVars() {
         this.usersTalking = {};
@@ -103,7 +100,7 @@ class ServerInit {
     setPrefix(str, chan) {
         this.prefix = str;
         this._updateDB("prefix", str);
-        chan.send(this._fillTemplateString(this.lang.prefix_changed, {w: str}));
+        chan.send(Utils.fillTemplateString(this.lang.prefix_changed, {w: str}));
         return true;
     }
 
@@ -127,7 +124,7 @@ class ServerInit {
             return true;
         }
         else {
-            chan.send(this._fillTemplateString(this.lang.invalid_roles, {w: errorRoles.toString()}));
+            chan.send(Utils.fillTemplateString(this.lang.invalid_roles, {w: errorRoles.toString()}));
             return false;
         }
     }
@@ -147,7 +144,7 @@ class ServerInit {
         if (nc && nc.type === type) {
             this[nameVar] = nc.id;
             this._updateDB(nameVar, nc.id);
-            chan.send(this._fillTemplateString(this.lang.chan_added, {w: str}));
+            chan.send(Utils.fillTemplateString(this.lang.chan_added, {w: str}));
             return true;
         }
         else {
@@ -157,17 +154,17 @@ class ServerInit {
                     .then(function (chanCreated) {
                             this[nameVar] = chanCreated.id;
                             that._updateDB(nameVar, chanCreated.id);
-                            chan.send(that._fillTemplateString(this.lang.chan_created, {w: str}));
+                            chan.send(Utils.fillTemplateString(this.lang.chan_created, {w: str}));
                             return true;
                         }
                     )
                     .catch(function (error) {
-                        chan.send(that._fillTemplateString(that.lang.invalid_chan, {w: str}));
+                        chan.send(Utils.fillTemplateString(that.lang.invalid_chan, {w: str}));
                         return false;
                     });
             }
             else {
-                chan.send(this._fillTemplateString(this.lang.invalid_chan, {w: str}));
+                chan.send(Utils.fillTemplateString(this.lang.invalid_chan, {w: str}));
                 return false;
             }
         }

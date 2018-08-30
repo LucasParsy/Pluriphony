@@ -19,5 +19,12 @@
     "rateSpeakerPrompt": "Voulez vous que le public puisse donner un avis sur un orateur après être passé à l'antenne? \no(ui) ou n(on)",
     "topSpeakerPrompt": "Voulez vous une commande pour lister les personnes les plus actives sur le channel vocal?\no(ui) ou n(on)",
     "endedInit": "la configuration est maintenant finie, vous pouvez utiliser le bot!",
-    "deletingTable": "Au revoir Dave..."
+    "deletingTable": "Au revoir Dave...",
+
+    "command_admin_reserved": "la commande '${this.w}' est réservée aux administrateurs du bot",
+    "command_not_found": "la commande '${this.w}' n'existe pas",
+
+    "command_create_poll": "sond",
+    "command_add_poll_choice": "ajChoixSond",
+    "command_suppr_poll_choice": "supprChoixSond"
 }
