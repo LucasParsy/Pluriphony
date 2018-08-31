@@ -22,6 +22,7 @@ module.exports = {
             .then(sent => {
                 if (sent instanceof Discord.Message) {
                     sent.delete(1000 * 60);
+                    msg.delete(1000 * 60);
                 }
                 msg.delete(1000 * 60);
             })

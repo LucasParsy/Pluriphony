@@ -10,7 +10,8 @@ sudo npm install -g typescript
 tsc --init
 
 mkdir db
-npm run
+//tsc .
+npm run start
 
 //npm install uws --save
 //npm install better-sqlite3 --save

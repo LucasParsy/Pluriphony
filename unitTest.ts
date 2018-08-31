@@ -1,10 +1,11 @@
+import {Server} from "./server";
+import fs = require('fs');
+
 const assert = require('assert');
 
-var fs = require('fs');
 const SQLite = require("better-sqlite3");
 
 const dbUtils = require('./database.js');
-const Server = require('./server.ts');
 
 
 const tableName = './db/unitTest-table.sqlite';
@@ -16,16 +17,16 @@ var guild = {
     id: 42,
     name: "testServer",
     roles: {
-        find: function (a, b) {
+        find: function (a: any, b: string) {
             if (b === "admin" || b === "modo")
                 return {id: 89};
         }
     },
     channels: {
-        find: function (a, b) {
+        find: function (a: any, b: string) {
             if (b === "vocal")
                 return {id: 78, type: "voice"};
-            if (b === "botChan")
+            if (b === "botchan")
                 return {id: 79, type: "text"};
         }
     }
@@ -34,7 +35,7 @@ var guild = {
 
 var channel = {
     str: "",
-    send: function (res) {
+    send: function (res: string) {
         this.str = res
     }
 };
@@ -45,13 +46,14 @@ dbUtils.createTables(sql);
 var tableCount = sql.prepare("SELECT count(*) FROM sqlite_master WHERE type='table'").pluck().get();
 assert.equal(tableCount, 3);
 assert.equal(dbUtils.isServerInDB(42, sql), false);
+// @ts-ignore
 var testServer = new Server(sql, guild, "py", "fr", [1, 2], [3, 4], 5, 7, true, true);
 assert(dbUtils.isServerInDB(42, sql));
 
 var sameServer = new Server(sql, guild);
 assert.equal(sameServer.id, 42);
 //assert(Array.isArray(sameServer.vocChan));
-assert.equal(sameServer.vocChans, 5);
+assert.equal(sameServer.vocChan, 5);
 assert.equal(sameServer.botChan, 7);
 assert.equal(sameServer.topSpeaker, true);
 
@@ -73,7 +75,7 @@ assert(cfServer.setRateSpeaker("y", channel));
 assert(cfServer.setTopSpeaker("n", channel));
 
 
-async function testAsyncMethods(cfServer) {
+async function testAsyncMethods(cfServer: Server) {
     var res = await cfServer.setVocChan("vocal", channel);
     assert(res);
     res = await cfServer.setVocChan("botChan", channel);
@@ -82,7 +84,7 @@ async function testAsyncMethods(cfServer) {
     assert(res);
     cfServer.completeInit();
     assert(dbUtils.isServerInDB(cfServer.id, sql));
-    cfServer.delete(sql, channel);
+    cfServer.delete();
 }
 
 testAsyncMethods(cfServer);

@@ -76,10 +76,9 @@ const methods = {
             command.run(name, server, posVotes, negVotes, speakTime);
         }
         else {
-
+            command = sql.prepare("UPDATE users SET posVotes = ? , negVotes = ?, speakTime = ? WHERE (name=? AND serverId=?);");
+            command.run(posVotes + res.posVotes, negVotes + res.negVotes, speakTime + res.speakTime, name, server);
         }
-        command = sql.prepare("UPDATE into users SET posVotes = ? , negVotes = ?, speakTime = ? WHERE (name=? AND serverId=?);");
-        command.run(posVotes + res.posVotes, negVotes + res.negVotes, speakTime + res.speakTime, name, server);
     }
 
 };
