@@ -1,54 +1,56 @@
-import {Server} from "./server";
-import fs = require('fs');
+import assert from "assert";
+import path from 'path';
+import fs from 'fs';
+import SQLite from "better-sqlite3";
+import {DMChannel, Role, Guild} from "discord.js";
 
-const assert = require('assert');
+import Server from "../src/server";
+import DbUtils from '../src/database.js';
 
-const SQLite = require("better-sqlite3");
-
-const dbUtils = require('./database.js');
+const tableName = path.join(__dirname, '..', 'db', 'unitTest-table.sqlite');
 
 
-const tableName = './db/unitTest-table.sqlite';
 if (fs.existsSync(tableName))
     fs.unlinkSync(tableName);
 const sql = new SQLite(tableName);
 
-var guild = {
+var gObj = {
     id: 42,
     name: "testServer",
     roles: {
-        find: function (a: any, b: string) {
-            if (b === "admin" || b === "modo")
+        find: function (fn: any): Object | undefined {
+            if (fn({name: "admin"}) || fn({name: "modo"}))
                 return {id: 89};
         }
     },
     channels: {
-        find: function (a: any, b: string) {
-            if (b === "vocal")
-                return {id: 78, type: "voice"};
-            if (b === "botchan")
-                return {id: 79, type: "text"};
+        find: function (fn: any): Object | undefined {
+            if (fn({name: "vocal"}))
+                return {id: 78, type: "voice", name: ""};
+            if (fn({name: "botchan"}))
+                return {id: 79, type: "text", name: ""};
         }
     }
 };
 
+// @ts-ignore
+var guild = <Guild>gObj;
 
-var channel = {
-    str: "",
+var channel = <DMChannel> {
     send: function (res: string) {
-        this.str = res
+        this.lastMessageID = res
     }
 };
 
 var guild2 = Object.assign({}, guild, {id: 43, name: "newServer"});
 
-dbUtils.createTables(sql);
+DbUtils.createTables(sql);
 var tableCount = sql.prepare("SELECT count(*) FROM sqlite_master WHERE type='table'").pluck().get();
 assert.equal(tableCount, 3);
-assert.equal(dbUtils.isServerInDB(42, sql), false);
+assert.equal(DbUtils.isServerInDB("42", sql), false);
 // @ts-ignore
 var testServer = new Server(sql, guild, "py", "fr", [1, 2], [3, 4], 5, 7, true, true);
-assert(dbUtils.isServerInDB(42, sql));
+assert(DbUtils.isServerInDB("42", sql));
 
 var sameServer = new Server(sql, guild);
 assert.equal(sameServer.id, 42);
@@ -58,15 +60,15 @@ assert.equal(sameServer.botChan, 7);
 assert.equal(sameServer.topSpeaker, true);
 
 
-dbUtils.updateUserValues("tuxlu", 42, sql, 1, 2, 0);
-dbUtils.updateUserValues("tuxlu", 42, sql, 12, 8, 10);
+DbUtils.updateUserValues("tuxlu", 42, sql, 1, 2, 0);
+DbUtils.updateUserValues("tuxlu", 42, sql, 12, 8, 10);
 var upResults = sql.prepare("SELECT posVotes, negVotes, speakTime FROM users WHERE (name='tuxlu' AND serverId=42);").get();
 assert(upResults.posVotes === 13 && upResults.negVotes === 10 && upResults.speakTime === 10);
 
 var cfServer = new Server(sql, guild2);
-assert(!dbUtils.isServerInDB(guild2.id, sql));
+assert(!DbUtils.isServerInDB(guild2.id, sql));
 assert(cfServer.setLang("wrong", channel) === false);
-assert(channel.str.startsWith(cfServer.lang.invalid_lang));
+assert(channel.lastMessageID.startsWith(cfServer.lang.invalid_lang));
 assert(cfServer.setLang("fr", channel));
 assert(cfServer.setPrefix("py", channel));
 assert(cfServer.setAdminRoles("admin, modo", channel));
@@ -83,7 +85,7 @@ async function testAsyncMethods(cfServer: Server) {
     res = await cfServer.setBotChan("#botChan", channel);
     assert(res);
     cfServer.completeInit();
-    assert(dbUtils.isServerInDB(cfServer.id, sql));
+    assert(DbUtils.isServerInDB(cfServer.id, sql));
     cfServer.delete();
 }
 
@@ -97,4 +99,4 @@ assert.equal(tableSoftDeleted, 1);
 
 
 testServer.delete(sql, channel);
-assert.equal(dbUtils.isServerInDB(42, sql), false);
+assert.equal(DbUtils.isServerInDB("42", sql), false);

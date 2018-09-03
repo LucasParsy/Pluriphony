@@ -1,22 +1,22 @@
 import SQLite from "better-sqlite3";
 import Discord from "discord.js";
 
-const Utils = require("./utils.js");
+import Utils from "./utils";
 
 const langTable = {
-    fr: require('./localization/fr.json'),
-    en: require('./localization/en.json')
+    fr: require('../localization/fr.json'),
+    en: require('../localization/en.json')
 };
 
-export class ServerInit {
+export default class ServerInit {
     public sql!: SQLite;
     public guild!: Discord.Guild;
     public id!: string;
     public name!: string;
     public prefix!: string;
     public lang!: LocStrings;
-    public admRoles!: Array<number>;
-    public modRoles!: Array<number>;
+    public admRoles!: Array<string>;
+    public modRoles!: Array<string>;
     public vocChan!: number;
     public botChan!: number;
     public rateSpeaker!: boolean;
@@ -37,19 +37,19 @@ export class ServerInit {
 
     constructor(sql: SQLite, guild: Discord.Guild);
     constructor(sql: SQLite, guild: Discord.Guild, prefix: string, lang: string,
-                admRoles: Array<number>, modRoles: Array<number>, vocChan: number,
+                admRoles: Array<string>, modRoles: Array<string>, vocChan: number,
                 botChan: number, rateSpeaker: boolean, topSpeaker: boolean);
 
 
     constructor(sql: SQLite, guild: Discord.Guild, prefix?: string, lang?: string,
-                admRoles?: Array<number>, modRoles?: Array<number>, vocChan?: number,
+                admRoles?: Array<string>, modRoles?: Array<string>, vocChan?: number,
                 botChan?: number, rateSpeaker?: boolean, topSpeaker?: boolean) {
         this._constructorRecallable(sql, guild, prefix, lang, admRoles, modRoles, vocChan, botChan, rateSpeaker, topSpeaker)
     }
 
 
     private _constructorRecallable(sql: SQLite, guild: Discord.Guild, prefix?: string, lang?: string,
-                                   admRoles?: Array<number>, modRoles?: Array<number>, vocChan?: number,
+                                   admRoles?: Array<string>, modRoles?: Array<string>, vocChan?: number,
                                    botChan?: number, rateSpeaker?: boolean, topSpeaker?: boolean) {
         this.sql = sql;
         this.guild = guild;
@@ -88,8 +88,8 @@ export class ServerInit {
 
         this.prefix = res.prefix;
         this.lang = langTable[res.lang];
-        this.admRoles = res.admRoles.split(',').map(Number);
-        this.modRoles = res.modRoles.split(',').map(Number);
+        this.admRoles = res.admRoles.split(',').map(String);
+        this.modRoles = res.modRoles.split(',').map(String);
         this.vocChan = parseInt(res.vocChans); //res.vocChan.split(',').map(Number);
         this.botChan = parseInt(res.botChan);
         this.rateSpeaker = res.rateSpeaker == true;
@@ -170,7 +170,7 @@ export class ServerInit {
                            type: 'text' | 'voice', createChan: boolean) {
         if (chanName.startsWith('#'))
             chanName = chanName.substr(1);
-        var nc = this.guild.channels.find(value => value.name === chanName.trim());
+        const nc = this.guild.channels.find(value => value.name === chanName.trim());
         if (nc && nc.type === type) {
             this[nameVar] = nc.id;
             this._updateDB(nameVar, nc.id);
@@ -180,7 +180,7 @@ export class ServerInit {
         else {
             if (createChan && this.guild.me.hasPermission(Discord.Permissions.FLAGS.MANAGE_CHANNELS!)) {
                 try {
-                    var chanCreated = await this.guild.createChannel(chanName, type);
+                    const chanCreated = await this.guild.createChannel(chanName, type);
                     this[nameVar] = chanCreated.id;
                     this._updateDB(nameVar, chanCreated.id);
                     chan.send(Utils.fillTemplateString(this.lang.chan_created, {w: chanCreated.name}));

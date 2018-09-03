@@ -1,4 +1,4 @@
-import {Server} from "./server";
+import Server from "./server";
 import SQLite from "better-sqlite3";
 import Discord, {DMChannel} from "discord.js";
 

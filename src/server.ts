@@ -1,11 +1,10 @@
-import ServerInit = require('./serverInit.js');
+import ServerInit from './serverInit.js';
+import DbUtils from './database.js';
 
-const dbUtils = require('./database.js');
-
-export class Server extends ServerInit.ServerInit {
+export default class Server extends ServerInit {
 
     soft_delete() {
-        if (!dbUtils.isServerInDB(this.id, this.sql))
+        if (!DbUtils.isServerInDB(this.id, this.sql))
             return;
         console.log("soft-deleting table " + this.name);
         //chan.send(this.lang.deletingTable);
@@ -14,7 +13,7 @@ export class Server extends ServerInit.ServerInit {
     }
 
     delete() {
-        if (!dbUtils.isServerInDB(this.id, this.sql))
+        if (!DbUtils.isServerInDB(this.id, this.sql))
             return;
         console.log("deleting table " + this.name);
         //chan.send(this.lang.deletingTable);

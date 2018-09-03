@@ -1,16 +1,19 @@
 import Discord, {Guild, Message, TextChannel} from "discord.js";
-import {Server} from "./server";
+import SQLite from "better-sqlite3";
+
+import Server from "./server";
 import {addUserToInit} from "./init"
+import Utils from "./utils";
+import DbUtils from './database.js';
+import Poll from './Poll';
+import path from "path";
 
 const client = new Discord.Client();
-const token = require('./token.json').token;
+const tableName = path.join(__dirname, '..', 'db', '../db/table.sqlite');
+const sql = new SQLite(tableName);
 
-const Utils = require("./utils.js");
-const dbUtils = require('./database.js');
+const token = require('../token.json').token;
 
-const SQLite = require("better-sqlite3");
-const sql = new SQLite('./db/table.sqlite');
-const Poll = require("./Poll.js");
 
 let guilds = new Map<string, Server>();
 
@@ -26,14 +29,14 @@ Number.prototype.toBoolean = function () {
 };
 */
 
-dbUtils.createTables(sql);
+DbUtils.createTables(sql);
 
 
 function checkGuildInitialized(guild: Discord.Guild) {
     if (!guild.available)
         return true;
     const id = guild.id;
-    if (dbUtils.isServerInDB(id, sql)) {
+    if (DbUtils.isServerInDB(id, sql)) {
         guilds.set(id, new Server(sql, guild));
         return true;
     }
@@ -122,7 +125,7 @@ client.on('message', msg => {
                     return showInvalidCommand(CommandName, msg, guild);
                 if (adminCommands.hasOwnProperty(title)) {
                     if (!(msg.member && msg.member.hasPermission(Discord.Permissions.FLAGS.MANAGE_GUILD!)) &&
-                        !(msg.member && Utils.userHasRole(guild.admRoles, msg.member.roles.values())))
+                        !(msg.member && Utils.userHasRole(guild.admRoles, msg.member.roles.array())))
                         return showInvalidRightsCommand(CommandName, msg, guild);
                     adminCommands[title](commandArray.slice(1), msg, sql);
                     return;

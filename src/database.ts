@@ -1,8 +1,12 @@
-const fs = require('fs');
-const reviewsFile = fs.createWriteStream("reviews.txt", {flags: 'a'});
+import fs from 'fs';
+import path from "path";
 
 
-function createSingleTable(parameters: { name: string, command: string, sql: any }) {
+const reviewsFile = fs.createWriteStream(path.join(__dirname, '..', 'db', "reviews.txt"), {flags: 'a'});
+
+function
+
+createSingleTable(parameters: { name: string, command: string, sql: any }) {
     let {name, command, sql} = parameters;
     const table = sql.prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = ?;").get(name);
     if (!table['count(*)']) {
@@ -14,9 +18,8 @@ function createSingleTable(parameters: { name: string, command: string, sql: any
 }
 
 
-const methods = {
-
-    createTables: function (sql: any) {
+export default class DbUtils {
+    static createTables(sql: any) {
         console.log("creating tables");
         sql.pragma("synchronous = 1");
         sql.pragma("journal_mode = wal");
@@ -43,32 +46,36 @@ const methods = {
                 "publicQuestionAdd INTEGER, FOREIGN KEY(serverId) REFERENCES server(id));",
             sql: sql
         });
-    },
+    }
 
-    addPollToDatabase: function (parameters: { serverId: number, voteTime: number, numVotes: number, numChoices: number, publicQuestionAdd: boolean, sql: any }) {
+
+    static addPollToDatabase(parameters: { serverId: number, voteTime: number, numVotes: number, numChoices: number, publicQuestionAdd: boolean, sql: any }) {
         let {serverId, voteTime, numVotes, numChoices, publicQuestionAdd, sql} = parameters;
         var command = sql.prepare("INSERT into polls VALUES (?, ?, ?, ?, ?);");
         command.run(serverId, voteTime, numVotes, numChoices, publicQuestionAdd ? 1 : 0)
-    },
+    }
 
-    createReview: function (serverName: string, username: string, review: string) {
+
+    static createReview(serverName: string, username: string, review: string) {
         const res = new Date().toLocaleString() + "  " + serverName + " , " + username + "\n" + review + "\n\n";
         reviewsFile.write(res)
-    },
+    }
 
-    isServerInDB(id: number, sql: any) {
+
+    static isServerInDB(id: string, sql: any) {
         const command = sql.prepare("SELECT id FROM servers WHERE (id=?);");
         const res = command.get(id);
         return (res !== undefined)
-    },
+    }
 
-    isUserInDB(name: string, server: number, sql: any) {
+
+    static isUserInDB(name: string, server: number, sql: any) {
         var command = sql.prepare("SELECT serverId FROM users WHERE (name=? AND serverId=?);");
         var res = command.get(name, server);
         return (res !== undefined)
-    },
+    }
 
-    updateUserValues(name: string, server: number, sql: any, posVotes: number, negVotes: number, speakTime: number) {
+    static updateUserValues(name: string, server: number, sql: any, posVotes: number, negVotes: number, speakTime: number) {
         var command = sql.prepare("SELECT posVotes, negVotes, speakTime FROM users WHERE (name=? AND serverId=?);");
         var res = command.get(name, server);
         if (res === undefined) {
@@ -81,7 +88,4 @@ const methods = {
         }
     }
 
-};
-
-module.exports = methods;
-
+}

@@ -1,8 +1,8 @@
 {
   "name": "pluriphony",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A bot to manage vocal debates on your server.Create a waitlist for people to join the channel, check and manage their speaking time, and more!",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
       "test": "node unitTest.js",
       "start": "node index.js"

@@ -9,7 +9,7 @@
 
 ## Installation
 
-you can host the bot yourself on any platform you want.
+you can host the bot yourself on any platform you want.<br>
 follow the 4 first steps of 
 <a href="https://www.digitaltrends.com/gaming/how-to-make-a-discord-bot/">this tutorial</a>
 to create a Discord bot and retrieve its API token.
@@ -20,9 +20,8 @@ pull this repo and add a file "token.json" like this:
 {"token": "Your Bot Token"}
 ```
 
-run script ```config.sh``` to install all dependencies and start the bot.
-you're all done!
-<br>The script is configured for Linux, but you could adapt it for Windows, or use 
+run the script ```config.sh``` to install all dependencies and start the bot. You're all done!<br>
+The script is configured for Linux, but you could adapt it for Windows, or use
 <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">WSL</a>.
 
 ## Usage
