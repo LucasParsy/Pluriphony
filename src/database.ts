@@ -4,9 +4,7 @@ import path from "path";
 
 const reviewsFile = fs.createWriteStream(path.join(__dirname, '..', 'db', "reviews.txt"), {flags: 'a'});
 
-function
-
-createSingleTable(parameters: { name: string, command: string, sql: any }) {
+function createSingleTable(parameters: { name: string, command: string, sql: any }) {
     let {name, command, sql} = parameters;
     const table = sql.prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = ?;").get(name);
     if (!table['count(*)']) {

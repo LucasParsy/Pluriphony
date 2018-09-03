@@ -20,7 +20,7 @@ pull this repo and add a file "token.json" like this:
 {"token": "Your Bot Token"}
 ```
 
-run the script ```config.sh``` to install all dependencies and start the bot. You're all done!<br>
+run the script ```launcher.sh``` to install all dependencies and start the bot. You're all done!<br>
 The script is configured for Linux, but you could adapt it for Windows, or use
 <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">WSL</a>.
 

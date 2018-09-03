@@ -1,7 +1,7 @@
-import ServerInit from './serverInit.js';
+import ServerBase from './serverBase.js';
 import DbUtils from './database.js';
 
-export default class Server extends ServerInit {
+export default class Server extends ServerBase {
 
     soft_delete() {
         if (!DbUtils.isServerInDB(this.id, this.sql))

@@ -8,7 +8,7 @@ const langTable = {
     en: require('../localization/en.json')
 };
 
-export default class ServerInit {
+export default class ServerBase {
     public sql!: SQLite;
     public guild!: Discord.Guild;
     public id!: string;

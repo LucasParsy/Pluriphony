@@ -2,10 +2,10 @@ import Discord, {Guild, Message, TextChannel} from "discord.js";
 import SQLite from "better-sqlite3";
 
 import Server from "./server";
-import {addUserToInit} from "./init"
+import {addUserToInit} from "./firstConfigure"
 import Utils from "./utils";
 import DbUtils from './database.js';
-import Poll from './Poll';
+import Poll from './poll';
 import path from "path";
 
 const client = new Discord.Client();
