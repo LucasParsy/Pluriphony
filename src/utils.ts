@@ -1,24 +1,22 @@
 import Discord, {Guild, Message, TextChannel} from "discord.js";
 
-
 export default class Utils {
 
-    static fillTemplateString(templateString: String, templateVars: Object) {
+    static fillTemplateString(templateString: string, templateVars: Object) {
         return new Function("return `" + templateString + "`;").call(templateVars);
     }
 
-
-    static getKeyByValue(object: Object, value: String) {
+    static getKeyByValue(object: LocStrings, value: string): string | undefined {
         return Object.keys(object).find(key => object[key] === value);
     }
 
-    static userHasRole(haystack: Array<String>, arr: Array<Discord.Role>) {
+    static userHasRole(haystack: Array<string>, arr: Array<Discord.Role>): boolean {
         return arr.some(function (v) {
             return haystack.includes(v.id);
         });
     }
 
-    static showMessageAndDelete(msg: Discord.Message, str: String) {
+    static showMessageAndDelete(msg: Discord.Message, str: string) {
         msg.reply(str)
             .then(sent => {
                 if (sent instanceof Discord.Message) {
@@ -30,3 +28,5 @@ export default class Utils {
             .catch(console.error);
     }
 }
+
+

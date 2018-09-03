@@ -3,10 +3,15 @@ import Discord from "discord.js";
 
 import Utils from "./utils";
 
-const langTable = {
+interface langTableInt {
+    [index: string]: LocStrings
+}
+
+const langTable = <langTableInt> {
     fr: require('../localization/fr.json'),
-    en: require('../localization/en.json')
+    en: require('../localization/en.json'),
 };
+
 
 export default class ServerBase {
     public sql!: SQLite;
@@ -33,6 +38,8 @@ export default class ServerBase {
     private usersTalking = {};
     private waitList = [];
     private waitListMessageId: number = -1;
+
+    [index: string]: any
 
 
     constructor(sql: SQLite, guild: Discord.Guild);

@@ -1,4 +1,6 @@
 interface LocStrings {
+    [index: string]: string
+
     test: string;
     lang_changed: string;
     invalid_lang: string;

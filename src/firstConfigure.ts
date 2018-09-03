@@ -14,7 +14,7 @@ export async function addUserToInit(msg: Discord.Message, sql: SQLite, guilds: M
         return console.log(`DM channel not created:  ${e}`);
     }
 
-    const filter = (m: any) => {
+    const filter = (m: Discord.Message) => {
         return !m.author.bot
     };
 
@@ -32,12 +32,12 @@ export async function addUserToInit(msg: Discord.Message, sql: SQLite, guilds: M
     let step = 0;
     const methods = ["setLang", "setPrefix", "setAdminRoles", "setModRoles",
         "setVocChan", "setBotChan", "setRateSpeaker", "setTopSpeaker"];
-    const prompts = ["langPrompt", "prefixPrompt", "adminRolePrompt", "modRolePrompt",
+    const prompts = <Array<string>> ["langPrompt", "prefixPrompt", "adminRolePrompt", "modRolePrompt",
         "vocChanPrompt", "botChanPrompt", "rateSpeakerPrompt", "topSpeakerPrompt"];
 
     msg.delete();
     channel.send(server.lang[prompts[0]]);
-    collector.on('collect', async function (msg: any) {
+    collector.on('collect', async function (msg: Discord.Message) {
         msg.content = msg.content.trim();
         //console.log(`Init: collected ${msg.content}`);
 

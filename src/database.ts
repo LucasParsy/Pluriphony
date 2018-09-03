@@ -1,10 +1,11 @@
 import fs from 'fs';
 import path from "path";
+import SQLite from "better-sqlite3";
 
 
 const reviewsFile = fs.createWriteStream(path.join(__dirname, '..', 'db', "reviews.txt"), {flags: 'a'});
 
-function createSingleTable(parameters: { name: string, command: string, sql: any }) {
+function createSingleTable(parameters: { name: string, command: string, sql: SQLite }) {
     let {name, command, sql} = parameters;
     const table = sql.prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = ?;").get(name);
     if (!table['count(*)']) {
@@ -17,7 +18,7 @@ function createSingleTable(parameters: { name: string, command: string, sql: any
 
 
 export default class DbUtils {
-    static createTables(sql: any) {
+    static createTables(sql: SQLite) {
         console.log("creating tables");
         sql.pragma("synchronous = 1");
         sql.pragma("journal_mode = wal");
@@ -47,7 +48,7 @@ export default class DbUtils {
     }
 
 
-    static addPollToDatabase(parameters: { serverId: number, voteTime: number, numVotes: number, numChoices: number, publicQuestionAdd: boolean, sql: any }) {
+    static addPollToDatabase(parameters: { serverId: number, voteTime: number, numVotes: number, numChoices: number, publicQuestionAdd: boolean, sql: SQLite }) {
         let {serverId, voteTime, numVotes, numChoices, publicQuestionAdd, sql} = parameters;
         var command = sql.prepare("INSERT into polls VALUES (?, ?, ?, ?, ?);");
         command.run(serverId, voteTime, numVotes, numChoices, publicQuestionAdd ? 1 : 0)
@@ -60,20 +61,20 @@ export default class DbUtils {
     }
 
 
-    static isServerInDB(id: string, sql: any) {
+    static isServerInDB(id: string, sql: SQLite) {
         const command = sql.prepare("SELECT id FROM servers WHERE (id=?);");
         const res = command.get(id);
         return (res !== undefined)
     }
 
 
-    static isUserInDB(name: string, server: number, sql: any) {
+    static isUserInDB(name: string, server: number, sql: SQLite) {
         var command = sql.prepare("SELECT serverId FROM users WHERE (name=? AND serverId=?);");
         var res = command.get(name, server);
         return (res !== undefined)
     }
 
-    static updateUserValues(name: string, server: number, sql: any, posVotes: number, negVotes: number, speakTime: number) {
+    static updateUserValues(name: string, server: number, sql: SQLite, posVotes: number, negVotes: number, speakTime: number) {
         var command = sql.prepare("SELECT posVotes, negVotes, speakTime FROM users WHERE (name=? AND serverId=?);");
         var res = command.get(name, server);
         if (res === undefined) {

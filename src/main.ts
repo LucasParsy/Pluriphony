@@ -5,7 +5,7 @@ import Server from "./server";
 import {addUserToInit} from "./firstConfigure"
 import Utils from "./utils";
 import DbUtils from './database.js';
-import Poll from './poll';
+import Commands from './commandsList';
 import path from "path";
 
 const client = new Discord.Client();
@@ -88,15 +88,6 @@ function getLetterEmoji(letter: number) {
 }
 
 
-const adminCommands = {
-    command_create_poll: Poll.createPoll,
-    command_suppr_poll_choice: Poll.removeChoicePoll,
-};
-
-const usersCommands = {
-    command_add_poll_choice: Poll.addChoicePoll,
-};
-
 function showInvalidRightsCommand(command: string, msg: Message, guild: Server) {
     var str = Utils.fillTemplateString(guild.lang.command_admin_reserved, {w: command});
     Utils.showMessageAndDelete(msg, str);
@@ -107,6 +98,9 @@ function showInvalidCommand(command: string, msg: Message, guild: Server) {
     //todo: str += la string d'aide générale, bien longue.
     Utils.showMessageAndDelete(msg, str);
 }
+
+
+
 
 client.on('message', msg => {
         if (msg.guild) {
@@ -123,17 +117,17 @@ client.on('message', msg => {
                 const title = Utils.getKeyByValue(guild.lang, CommandName);
                 if (title === undefined)
                     return showInvalidCommand(CommandName, msg, guild);
-                if (adminCommands.hasOwnProperty(title)) {
+                if (Commands.adminC.hasOwnProperty(title)) {
                     if (!(msg.member && msg.member.hasPermission(Discord.Permissions.FLAGS.MANAGE_GUILD!)) &&
                         !(msg.member && Utils.userHasRole(guild.admRoles, msg.member.roles.array())))
                         return showInvalidRightsCommand(CommandName, msg, guild);
-                    adminCommands[title](commandArray.slice(1), msg, sql);
+                    Commands.adminC[title](commandArray.slice(1), msg, sql);
                     return;
                 }
 
-                if (!usersCommands.hasOwnProperty(title))
+                if (!Commands.userC.hasOwnProperty(title))
                     return showInvalidCommand(CommandName, msg, guild);
-                usersCommands[title](commandArray.slice(1), msg, sql);
+                Commands.userC[title](commandArray.slice(1), msg, sql);
             }
 
             else if ((msg.content).replace(/ /g, '') === "pyconfigure" &&
