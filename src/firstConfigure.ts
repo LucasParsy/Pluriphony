@@ -5,7 +5,7 @@ import Discord, {DMChannel} from "discord.js";
 
 var guildsCollected: Array<string> = [];
 
-export async function addUserToInit(msg: Discord.Message, sql: SQLite, guilds: Map<string, Server>) {
+export async function addUserToInit(msg: Discord.Message, sql: SQLite.Database, guilds: Map<string, Server>) {
     let channel: DMChannel;
     try {
         channel = await msg.author.createDM();

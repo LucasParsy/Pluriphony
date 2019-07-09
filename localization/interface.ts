@@ -28,5 +28,5 @@ interface LocStrings {
 
     command_create_poll: string;
     command_add_poll_choice: string;
-    command_suppr_poll_choice: string;
+    command_del_poll_choice: string;
 }

@@ -26,5 +26,5 @@
 
     "command_create_poll": "sond",
     "command_add_poll_choice": "ajChoixSond",
-    "command_suppr_poll_choice": "supprChoixSond"
+    "command_del_poll_choice": "supprChoixSond"
 }

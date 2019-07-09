@@ -26,6 +26,6 @@
 
     "command_create_poll": "poll",
     "command_add_poll_choice": "addPollChoice",
-    "command_suppr_poll_choice": "delPollChoice"
+    "command_del_poll_choice": "delPollChoice"
 
 }

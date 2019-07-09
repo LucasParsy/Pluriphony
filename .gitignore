@@ -4,3 +4,5 @@ db/
 .idea/
 *.js
 /token.json
+/npm-debug.log
+/package-lock.json

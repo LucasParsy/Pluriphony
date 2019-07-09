@@ -1,11 +1,11 @@
 {
   "name": "pluriphony",
   "version": "0.0.1",
-  "description": "A bot to manage vocal debates on your server.Create a waitlist for people to join the channel, check and manage their speaking time, and more!",
+  "description": "A bot to manage vocal debates on your server.Create a wait list for people to join the channel, check and manage their speaking time, and more!",
   "main": "src/main.js",
   "scripts": {
-      "test": "node test/unitTest.js",
-      "start": "node src/main.js"
+    "test": "node test/unitTest.js",
+    "start": "node src/main.js"
   },
   "keywords": [
     "Discord",
@@ -15,13 +15,13 @@
   "author": "Lucas Parsy",
   "license": "MIT",
   "dependencies": {
-    "@types/better-sqlite3": "^3.1.3",
-    "better-sqlite3": "^4.1.4",
-    "discord.js": "^11.4.2",
-    "typescript": "^3.0.3",
-    "uws": "^10.148.2"
+    "@discordjs/uws": "^11.149.1",
+    "better-sqlite3": "^5.4.0",
+    "discord.js": "^11.5.1",
+    "typescript": "^3.5.2"
   },
   "devDependencies": {
-    "@types/node": "^10.9.3"
+    "@types/better-sqlite3": "^5.4.0",
+    "@types/node": "^12.0.12"
   }
 }

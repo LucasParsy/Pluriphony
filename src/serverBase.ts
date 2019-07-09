@@ -14,7 +14,7 @@ const langTable = <langTableInt> {
 
 
 export default class ServerBase {
-    public sql!: SQLite;
+    public sql!: SQLite.Database;
     public guild!: Discord.Guild;
     public id!: string;
     public name!: string;
@@ -42,20 +42,20 @@ export default class ServerBase {
     [index: string]: any
 
 
-    constructor(sql: SQLite, guild: Discord.Guild);
-    constructor(sql: SQLite, guild: Discord.Guild, prefix: string, lang: string,
+    constructor(sql: SQLite.Database, guild: Discord.Guild);
+    constructor(sql: SQLite.Database, guild: Discord.Guild, prefix: string, lang: string,
                 admRoles: Array<string>, modRoles: Array<string>, vocChan: number,
                 botChan: number, rateSpeaker: boolean, topSpeaker: boolean);
 
 
-    constructor(sql: SQLite, guild: Discord.Guild, prefix?: string, lang?: string,
+    constructor(sql: SQLite.Database, guild: Discord.Guild, prefix?: string, lang?: string,
                 admRoles?: Array<string>, modRoles?: Array<string>, vocChan?: number,
                 botChan?: number, rateSpeaker?: boolean, topSpeaker?: boolean) {
         this._constructorRecallable(sql, guild, prefix, lang, admRoles, modRoles, vocChan, botChan, rateSpeaker, topSpeaker)
     }
 
 
-    private _constructorRecallable(sql: SQLite, guild: Discord.Guild, prefix?: string, lang?: string,
+    private _constructorRecallable(sql: SQLite.Database, guild: Discord.Guild, prefix?: string, lang?: string,
                                    admRoles?: Array<string>, modRoles?: Array<string>, vocChan?: number,
                                    botChan?: number, rateSpeaker?: boolean, topSpeaker?: boolean) {
         this.sql = sql;
@@ -84,7 +84,7 @@ export default class ServerBase {
         this.init = true;
     }
 
-    private _constructorWithDB(sql: SQLite) {
+    private _constructorWithDB(sql: SQLite.Database) {
         const command = sql.prepare("SELECT * FROM servers WHERE (id=?);");
         let res = command.get(this.id);
 
@@ -99,8 +99,8 @@ export default class ServerBase {
         this.modRoles = res.modRoles.split(',').map(String);
         this.vocChan = parseInt(res.vocChans); //res.vocChan.split(',').map(Number);
         this.botChan = parseInt(res.botChan);
-        this.rateSpeaker = res.rateSpeaker == true;
-        this.topSpeaker = res.topSpeaker == true;
+        this.rateSpeaker = res.rateSpeaker;
+        this.topSpeaker = res.topSpeaker;
         this.statTotComm = res.statTotComm;
         this.statMaxWaitlist = res.statMaxWaitlist;
         this.init = true;

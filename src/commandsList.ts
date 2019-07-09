@@ -3,7 +3,7 @@ import SQLite from "better-sqlite3";
 import Poll from "./poll";
 
 interface commandCallback {
-    (params: Array<String>, msg: Discord.Message, sql: SQLite): void
+    (params: Array<String>, msg: Discord.Message, sql: SQLite.Database): void
 }
 
 interface commandCallbackObject {
@@ -14,7 +14,7 @@ export default class Commands {
 
     static adminC: commandCallbackObject = {
         command_create_poll: Poll.createPoll,
-        command_suppr_poll_choice: Poll.removeChoicePoll,
+        command_del_poll_choice: Poll.removeChoicePoll,
     };
 
     static userC: commandCallbackObject = {
