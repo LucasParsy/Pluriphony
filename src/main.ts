@@ -47,10 +47,10 @@ function checkGuildInitialized(guild: Discord.Guild) {
 //flipped "type == "text" condition, seems wrong. Needs to be verified.
 function getFirstTextChannel(guild: Guild): TextChannel | null {
     const sortedChannels = guild.channels.sort(function (chan1, chan2) {
-        if (chan1.type !== `text`) return -1;
+        if (chan1.type !== "text") return -1;
 
         const perm = chan1.permissionsFor(guild.me);
-        if (perm === null || !perm.has(`SEND_MESSAGES`)) return -1;
+        if (perm === null || !perm.has("SEND_MESSAGES")) return -1;
         return chan1.position < chan2.position ? -1 : 1;
     });
 
@@ -83,23 +83,16 @@ client.on("guildDelete", (guild) => {
 });
 
 
-function getLetterEmoji(letter: number) {
-    return (":regional_indicator_" + String.fromCharCode(97 + letter) + ":")
-}
-
-
 function showInvalidRightsCommand(command: string, msg: Message, guild: Server) {
-    var str = Utils.fillTemplateString(guild.lang.command_admin_reserved, {w: command});
+    const str = Utils.fillTemplateString(guild.lang.command_admin_reserved, {w: command});
     Utils.showMessageAndDelete(msg, str);
 }
 
 function showInvalidCommand(command: string, msg: Message, guild: Server) {
-    var str = Utils.fillTemplateString(guild.lang.command_not_found, {w: command});
+    const str = Utils.fillTemplateString(guild.lang.command_not_found, {w: command});
     //todo: str += la string d'aide générale, bien longue.
     Utils.showMessageAndDelete(msg, str);
 }
-
-
 
 
 client.on('message', msg => {
@@ -128,11 +121,9 @@ client.on('message', msg => {
                 if (!Commands.userC.hasOwnProperty(title))
                     return showInvalidCommand(CommandName, msg, guild);
                 Commands.userC[title](commandArray.slice(1), msg, sql);
-            }
-
-            else if ((msg.content).replace(/ /g, '') === "pyconfigure" &&
+            } else if ((msg.content).replace(/ /g, '') === "pyconfigure" &&
                 msg.member && msg.member.hasPermission(Discord.Permissions.FLAGS.MANAGE_GUILD!)) {
-                addUserToInit(msg, sql, guilds);
+                addUserToInit(msg, sql, guilds).then();
             }
 
 
@@ -162,4 +153,4 @@ client.on('message', msg => {
 //client.on('messageReactionAdd', (reaction, user) => {
 //});
 
-client.login(token);
+client.login(token).then();

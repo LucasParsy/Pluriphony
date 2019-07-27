@@ -2,6 +2,11 @@ import Discord, {Guild, Message, TextChannel} from "discord.js";
 
 export default class Utils {
 
+    static getLetterEmoji(letter: number) {
+        return (":regional_indicator_" + String.fromCharCode(97 + letter) + ":")
+    }
+
+
     static fillTemplateString(templateString: string, templateVars: Object) {
         return new Function("return `" + templateString + "`;").call(templateVars);
     }
@@ -19,10 +24,8 @@ export default class Utils {
     static showMessageAndDelete(msg: Discord.Message, str: string) {
         msg.reply(str)
             .then(sent => {
-                if (sent instanceof Discord.Message) {
-                    sent.delete(1000 * 60);
-                    msg.delete(1000 * 60);
-                }
+                if (sent instanceof Discord.Message)
+                    sent.delete(1000 * 60).then();
                 msg.delete(1000 * 60);
             })
             .catch(console.error);

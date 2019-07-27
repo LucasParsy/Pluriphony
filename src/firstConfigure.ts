@@ -3,7 +3,7 @@ import SQLite from "better-sqlite3";
 import Discord, {DMChannel} from "discord.js";
 
 
-var guildsCollected: Array<string> = [];
+const guildsCollected: Array<string> = [];
 
 export async function addUserToInit(msg: Discord.Message, sql: SQLite.Database, guilds: Map<string, Server>) {
     let channel: DMChannel;
@@ -20,7 +20,7 @@ export async function addUserToInit(msg: Discord.Message, sql: SQLite.Database, 
 
     const guildId = msg.guild.id;
     if (guildsCollected.indexOf(guildId) !== -1) {
-        msg.reply("someone is already configuring this bot!");
+        await msg.reply("someone is already configuring this bot!");
         return;
     }
 
@@ -51,7 +51,7 @@ export async function addUserToInit(msg: Discord.Message, sql: SQLite.Database, 
             channel.send(server.lang.endedInit);
             server.completeInit();
             collector.stop("ended Init");
-            channel.delete();
+            await channel.delete();
             const index = guildsCollected.indexOf(guildId);
             if (index !== -1)
                 guildsCollected.splice(index, 1);

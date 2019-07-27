@@ -14,15 +14,21 @@ startBot || {
     echo "run failed, installing dependencies"
     echo "requiring sudo rights, read this file to know what it does!"
 
-    ##nstalling lastest version of npm
-    sudo apt-get install npm build-essential python2.7 sqlite3
-    sudo npm install -g
-    npm install @discordjs/uws
+    ##installing lastest version of npm
+    if (command -v pacman); then
+	sudo pacman -S --needed npm base-devel python2 sqlite3
+    elif (command -v apt-get); then
+	sudo apt-get install npm build-essential python2.7 sqlite3
+    elif (command -v yum); then
+	sudo yum install npm build-essential python2.7 sqlite3
+    else
+	echo "please update this script with your distribution package manager"
+    fi
+
+    sudo npm install -g n
     sudo n stable
 
-    #sudo npm install -g node-gyp typescript
-    #sudo npm install better-sqlite3 --save
-    #sudo npm install discord.js --save
+    npm install
 
     startBot
 }

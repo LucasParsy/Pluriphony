@@ -30,15 +30,16 @@ export default class ServerBase {
     private langName: string = "en";
 
     private statTotComm: number = 0;
-    private statMaxWaitlist: number = 0;
+    private statMaxWaitList: number = 0;
     private init: boolean = false;
 
 
     //todo: what do I do with these?
+/*
     private usersTalking = {};
     private waitList = [];
     private waitListMessageId: number = -1;
-
+*/
     [index: string]: any
 
 
@@ -51,11 +52,11 @@ export default class ServerBase {
     constructor(sql: SQLite.Database, guild: Discord.Guild, prefix?: string, lang?: string,
                 admRoles?: Array<string>, modRoles?: Array<string>, vocChan?: number,
                 botChan?: number, rateSpeaker?: boolean, topSpeaker?: boolean) {
-        this._constructorRecallable(sql, guild, prefix, lang, admRoles, modRoles, vocChan, botChan, rateSpeaker, topSpeaker)
+        this._constructorReCallable(sql, guild, prefix, lang, admRoles, modRoles, vocChan, botChan, rateSpeaker, topSpeaker)
     }
 
 
-    private _constructorRecallable(sql: SQLite.Database, guild: Discord.Guild, prefix?: string, lang?: string,
+    private _constructorReCallable(sql: SQLite.Database, guild: Discord.Guild, prefix?: string, lang?: string,
                                    admRoles?: Array<string>, modRoles?: Array<string>, vocChan?: number,
                                    botChan?: number, rateSpeaker?: boolean, topSpeaker?: boolean) {
         this.sql = sql;
@@ -99,10 +100,10 @@ export default class ServerBase {
         this.modRoles = res.modRoles.split(',').map(String);
         this.vocChan = parseInt(res.vocChans); //res.vocChan.split(',').map(Number);
         this.botChan = parseInt(res.botChan);
-        this.rateSpeaker = res.rateSpeaker;
-        this.topSpeaker = res.topSpeaker;
+        this.rateSpeaker = res.rateSpeaker === 1;
+        this.topSpeaker = res.topSpeaker === 1;
         this.statTotComm = res.statTotComm;
-        this.statMaxWaitlist = res.statMaxWaitlist;
+        this.statMaxWaitList = res.statMaxWaitList;
         this.init = true;
     }
 
@@ -226,7 +227,7 @@ export default class ServerBase {
     }
 
     completeInit() {
-        this._constructorRecallable(this.sql, this.guild, this.prefix, this.langName, this.admRoles, this.modRoles,
+        this._constructorReCallable(this.sql, this.guild, this.prefix, this.langName, this.admRoles, this.modRoles,
             this.vocChan, this.botChan, this.rateSpeaker, this.topSpeaker);
     }
 }

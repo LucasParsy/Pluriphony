@@ -53,7 +53,7 @@ export default class DbUtils {
         publicQuestionAdd: boolean, sql: SQLite.Database
     }) {
         let {serverId, voteTime, numVotes, numChoices, publicQuestionAdd, sql} = parameters;
-        var command = sql.prepare("INSERT into polls VALUES (?, ?, ?, ?, ?);");
+        const command = sql.prepare("INSERT into polls VALUES (?, ?, ?, ?, ?);");
         command.run(serverId, voteTime, numVotes, numChoices, publicQuestionAdd ? 1 : 0)
     }
 
@@ -72,14 +72,14 @@ export default class DbUtils {
 
 
     static isUserInDB(name: string, server: number, sql: SQLite.Database) {
-        var command = sql.prepare("SELECT serverId FROM users WHERE (name=? AND serverId=?);");
-        var res = command.get(name, server);
+        const command = sql.prepare("SELECT serverId FROM users WHERE (name=? AND serverId=?);");
+        const res = command.get(name, server);
         return (res !== undefined)
     }
 
     static updateUserValues(name: string, server: number, sql: SQLite.Database, posVotes: number, negVotes: number, speakTime: number) {
-        var command = sql.prepare("SELECT posVotes, negVotes, speakTime FROM users WHERE (name=? AND serverId=?);");
-        var res = command.get(name, server);
+        let command = sql.prepare("SELECT posVotes, negVotes, speakTime FROM users WHERE (name=? AND serverId=?);");
+        const res = command.get(name, server);
         if (res === undefined) {
             command = sql.prepare("INSERT into users VALUES (?, ?, ?, ?, ?);");
             command.run(name, server, posVotes, negVotes, speakTime);

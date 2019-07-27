@@ -6,3 +6,4 @@ db/
 /token.json
 /npm-debug.log
 /package-lock.json
+*.js.map

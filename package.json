@@ -15,7 +15,7 @@
   "author": "Lucas Parsy",
   "license": "MIT",
   "dependencies": {
-    "@discordjs/uws": "^11.149.1",
+    "@discordjs/uws": "^10.149.0",
     "better-sqlite3": "^5.4.0",
     "discord.js": "^11.5.1",
     "typescript": "^3.5.2"
