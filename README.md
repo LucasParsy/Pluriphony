@@ -1,4 +1,6 @@
-# Pluriphony - A Discord bot for managing vocal debates
+<img align="left" width="100" height="100" src="logo.png" alt="Pluriphony Logo">
+
+# Pluriphony - A Discord bot <br> for managing vocal debates
 #### *create a waitlist for your vocal channel, manage  participant's speaking time and log it in a leaderboard!*
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
@@ -21,7 +23,7 @@ pull this repo and add a file "token.json" like this:
 ```
 
 run the script ```launcher.sh``` to install all dependencies and start the bot. You're all done!<br>
-The script is configured for Linux, but you could adapt it for Windows, or use
+The script is configured for Linux (Ubuntu/Debian/Arch), but you could adapt it for Windows, or use
 <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">WSL</a>.
 
 ## Usage
@@ -40,7 +42,9 @@ or check the <a href="wiki">Wiki</a> for a more detailed tour of the bot's featu
 ## License
 
 Released under the [GNU GPL v3](LICENSE).
+The bot icon headphones are from SVG Repo, under [CC BY 4.0](LICENSE)
 
-*Pluriphony is inspired by another project I am working on: <a href="https://polyvox.fr/">Polyvox</a>,
+
+*Pluriphony is inspired by another project I am working on: Polyvox,
 a complete platform for audiovisual debate, with a built-in moderation ensuring equal speaking time for everyone.
-Go check it out!*
+More news about it soon!*
