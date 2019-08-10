@@ -1,4 +1,5 @@
-import Discord, {Guild, Message, TextChannel} from "discord.js";
+import Discord, {Emoji, Guild, Message, TextChannel} from "discord.js";
+import Server from "./server";
 
 export default class Utils {
 
@@ -29,6 +30,23 @@ export default class Utils {
                 msg.delete(1000 * 60);
             })
             .catch(console.error);
+    }
+
+    //see https://stackoverflow.com/questions/51447954/sending-a-message-the-first-channel-with-discord-js
+//flipped "type == "text" condition, seems wrong. Needs to be verified.
+    static getFirstTextChannel(guild: Guild): TextChannel | null {
+        const sortedChannels = guild.channels.sort(function (chan1, chan2) {
+            if (chan1.type !== "text") return -1;
+
+            const perm = chan1.permissionsFor(guild.me);
+            if (perm === null || !perm.has("SEND_MESSAGES")) return -1;
+            return chan1.position < chan2.position ? -1 : 1;
+        });
+
+        const chan = sortedChannels.first();
+        if (chan instanceof TextChannel)
+            return chan;
+        return null;
     }
 }
 

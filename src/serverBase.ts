@@ -22,8 +22,8 @@ export default class ServerBase {
     public lang!: LocStrings;
     public admRoles!: Array<string>;
     public modRoles!: Array<string>;
-    public vocChan!: number;
-    public botChan!: number;
+    public vocChan!: string;
+    public botChan!: string;
     public rateSpeaker!: boolean;
     public topSpeaker!: boolean;
 
@@ -45,20 +45,20 @@ export default class ServerBase {
 
     constructor(sql: SQLite.Database, guild: Discord.Guild);
     constructor(sql: SQLite.Database, guild: Discord.Guild, prefix: string, lang: string,
-                admRoles: Array<string>, modRoles: Array<string>, vocChan: number,
-                botChan: number, rateSpeaker: boolean, topSpeaker: boolean);
+                admRoles: Array<string>, modRoles: Array<string>, vocChan: string,
+                botChan: string, rateSpeaker: boolean, topSpeaker: boolean);
 
 
     constructor(sql: SQLite.Database, guild: Discord.Guild, prefix?: string, lang?: string,
-                admRoles?: Array<string>, modRoles?: Array<string>, vocChan?: number,
-                botChan?: number, rateSpeaker?: boolean, topSpeaker?: boolean) {
+                admRoles?: Array<string>, modRoles?: Array<string>, vocChan?: string,
+                botChan?: string, rateSpeaker?: boolean, topSpeaker?: boolean) {
         this._constructorReCallable(sql, guild, prefix, lang, admRoles, modRoles, vocChan, botChan, rateSpeaker, topSpeaker)
     }
 
 
     private _constructorReCallable(sql: SQLite.Database, guild: Discord.Guild, prefix?: string, lang?: string,
-                                   admRoles?: Array<string>, modRoles?: Array<string>, vocChan?: number,
-                                   botChan?: number, rateSpeaker?: boolean, topSpeaker?: boolean) {
+                                   admRoles?: Array<string>, modRoles?: Array<string>, vocChan?: string,
+                                   botChan?: string, rateSpeaker?: boolean, topSpeaker?: boolean) {
         this.sql = sql;
         this.guild = guild;
         this.id = guild.id;
@@ -70,7 +70,7 @@ export default class ServerBase {
 
         const command = sql.prepare("INSERT INTO servers VALUES(?, ?, ?, ?, ?, ?, ?, ?, ? , ?, 0, 0, 0);");
         command.run(guild.id, guild.name, prefix, lang, admRoles!.toString(), modRoles!.toString(),
-            vocChan!.toString(), botChan!.toString(), rateSpeaker ? 1 : 0, topSpeaker ? 1 : 0);
+            vocChan!, botChan!, rateSpeaker ? 1 : 0, topSpeaker ? 1 : 0);
 
 
         this.prefix = prefix;
@@ -98,8 +98,8 @@ export default class ServerBase {
         this.lang = langTable[res.lang];
         this.admRoles = res.admRoles.split(',').map(String);
         this.modRoles = res.modRoles.split(',').map(String);
-        this.vocChan = parseInt(res.vocChans); //res.vocChan.split(',').map(Number);
-        this.botChan = parseInt(res.botChan);
+        this.vocChan = res.vocChans; //res.vocChan.split(',').map(Number);
+        this.botChan = res.botChan;
         this.rateSpeaker = res.rateSpeaker === 1;
         this.topSpeaker = res.topSpeaker === 1;
         this.statTotComm = res.statTotComm;

@@ -43,23 +43,6 @@ function checkGuildInitialized(guild: Discord.Guild) {
     return false;
 }
 
-//see https://stackoverflow.com/questions/51447954/sending-a-message-the-first-channel-with-discord-js
-//flipped "type == "text" condition, seems wrong. Needs to be verified.
-function getFirstTextChannel(guild: Guild): TextChannel | null {
-    const sortedChannels = guild.channels.sort(function (chan1, chan2) {
-        if (chan1.type !== "text") return -1;
-
-        const perm = chan1.permissionsFor(guild.me);
-        if (perm === null || !perm.has("SEND_MESSAGES")) return -1;
-        return chan1.position < chan2.position ? -1 : 1;
-    });
-
-    const chan = sortedChannels.first();
-    if (chan instanceof TextChannel)
-        return chan;
-    return null;
-}
-
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 
@@ -71,7 +54,7 @@ client.on('ready', () => {
 
 client.on("guildCreate", (guild) => {
     if (!checkGuildInitialized(guild)) {
-        const chan = getFirstTextChannel(guild);
+        const chan = Utils.getFirstTextChannel(guild);
         if (chan !== null)
             chan.send(`Thanks for adding me! admin, please type "py configure" to set me up.`);
     }
@@ -125,7 +108,6 @@ client.on('message', msg => {
                 msg.member && msg.member.hasPermission(Discord.Permissions.FLAGS.MANAGE_GUILD!)) {
                 addUserToInit(msg, sql, guilds).then();
             }
-
 
             /*
             if (msg.content.startsWith("startPoll")) {
