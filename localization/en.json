@@ -26,6 +26,22 @@
 
     "command_create_poll": "poll",
     "command_add_poll_choice": "addPollChoice",
-    "command_del_poll_choice": "delPollChoice"
+    "command_del_poll_choice": "delPollChoice",
 
+    "debate_title": "waitlist of channel **${this.w}**",
+    "debate_subtitle_speaking_time": "\nspeaking time:**${this.w}**",
+    "waitlist_title": "Wait list",
+    "airing_title": "On air",
+    "airing_subtitle": "**${this.w}** on air, with _${this.effectiveTime}_ of speech",
+    "waiting_subtitle": "${this.i}since ${this.w}",
+    "waitlist_footer":   "\uD83D\uDC51: moderator, \uD83D\uDCA4: AFK user",
+
+    "waitlist_nobody_speaking_title": "the conversation seems to not be started yet...",
+    "waitlist_nobody_speaking_subtitle": "it should begin in a few moments",
+
+    "waitlist_nobody_waiting_title": "Nobody yet in the waiting list!",
+    "waitlist_nobody_waiting_subtitle": "don't hesitate joining it \uD83D\uDE03",
+
+    "waitlist_bottom_help_title": "You too join the wait list by reacting with :arrow_up: !",
+    "waitlist_bottom_help_subtitle": "skip your turn with :raised_hand:, and leave with :x:"
 }

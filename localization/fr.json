@@ -26,5 +26,22 @@
 
     "command_create_poll": "sond",
     "command_add_poll_choice": "ajChoixSond",
-    "command_del_poll_choice": "supprChoixSond"
+    "command_del_poll_choice": "supprChoixSond",
+
+    "debate_title": "file d'attente du channel **${this.w}**",
+    "debate_subtitle_speaking_time": "\ntemps de parole: **${this.w}**",
+    "waitlist_title": "File d'attente",
+    "airing_title": "à l'antenne",
+    "airing_subtitle": "**${this.w}** d'antenne,avec _${this.effectiveTime}_ de parole",
+    "waiting_subtitle": "${this.i}depuis ${this.w}.",
+    "waitlist_footer":   "\uD83D\uDC51: modérateur, \uD83D\uDCA4: utilisateur AFK",
+
+    "waitlist_nobody_speaking_title": "La conversation ne semble pas encore lancée...",
+    "waitlist_nobody_speaking_subtitle": "elle devrait commencer dans quelques instants",
+
+    "waitlist_nobody_waiting_title": "Personne dans la file d'attente pour l'instant!",
+    "waitlist_nobody_waiting_subtitle": "n'hésitez pas à la rejoindre \uD83D\uDE03",
+
+    "waitlist_bottom_help_title": "Vous aussi rejoignez la file d'attente en réagissant avec :arrow_up: !",
+    "waitlist_bottom_help_subtitle": "passez votre tour avec :raised_hand:, et quittez là avec :x:"
 }

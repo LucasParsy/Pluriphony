@@ -29,4 +29,21 @@ interface LocStrings {
     command_create_poll: string;
     command_add_poll_choice: string;
     command_del_poll_choice: string;
+
+    debate_title: string;
+    debate_subtitle_speaking_time: string;
+    waitlist_title: string;
+    airing_title: string;
+    airing_subtitle: string;
+    waiting_subtitle: string;
+    waitlist_footer: string;
+
+    waitlist_nobody_speaking_title: string;
+    waitlist_nobody_speaking_subtitle: string;
+
+    waitlist_nobody_waiting_title: string;
+    waitlist_nobody_waiting_subtitle: string;
+
+    waitlist_bottom_help_title: string
+    waitlist_bottom_help_subtitle: string
 }
