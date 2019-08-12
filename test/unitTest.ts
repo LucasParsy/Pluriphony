@@ -15,20 +15,20 @@ if (fs.existsSync(tableName))
 const sql = new SQLite(tableName);
 
 const gObj = {
-    id: 42,
+    id: "42",
     name: "testServer",
     roles: {
         find: function (fn: any): Object | undefined {
             if (fn({name: "admin"}) || fn({name: "modo"}))
-                return {id: 89};
+                return {id: "89"};
         }
     },
     channels: {
         find: function (fn: any): Object | undefined {
             if (fn({name: "vocal"}))
-                return {id: 78, type: "voice", name: ""};
+                return {id: "78", type: "voice", name: ""};
             if (fn({name: "botchan"}))
-                return {id: 79, type: "text", name: ""};
+                return {id: "79", type: "text", name: ""};
         }
     }
 };
@@ -42,21 +42,21 @@ const channel = <DMChannel>{
     }
 };
 
-const guild2 = Object.assign({}, guild, {id: 43, name: "newServer"});
+const guild2 = Object.assign({}, guild, {id: "43", name: "newServer"});
 
 DbUtils.createTables(sql);
 const tableCount = sql.prepare("SELECT count(*) FROM sqlite_master WHERE type='table'").pluck().get();
 assert.strictEqual(tableCount, 3);
 assert.strictEqual(DbUtils.isServerInDB("42", sql), false);
 // @ts-ignore
-const testServer = new Server(sql, guild, "py", "fr", [1, 2], [3, 4], 5, 7, true, true);
+const testServer = new Server(sql, guild, "py", "fr", ["1", "2"], ["3", "4"], "5", "7", true, true);
 assert(DbUtils.isServerInDB("42", sql));
 
 const sameServer = new Server(sql, guild);
-assert.strictEqual(sameServer.id, 42);
+assert.strictEqual(sameServer.id, "42");
 //assert(Array.isArray(sameServer.vocChan));
-assert.strictEqual(sameServer.vocChan, 5);
-assert.strictEqual(sameServer.botChan, 7);
+assert.strictEqual(sameServer.vocChan, "5");
+assert.strictEqual(sameServer.botChan, "7");
 assert.strictEqual(sameServer.topSpeaker, true);
 
 
@@ -94,10 +94,10 @@ testAsyncMethods(cfServer);
 
 //dbUtils.createReview("testServeur", "utilisateur", "ceci est une review");
 
-testServer.soft_delete(sql, channel);
+testServer.soft_delete();
 const tableSoftDeleted = sql.prepare("SELECT left FROM servers WHERE id = 42").pluck().get();
 assert.strictEqual(tableSoftDeleted, 1);
 
 
-testServer.delete(sql, channel);
+testServer.delete();
 assert.strictEqual(DbUtils.isServerInDB("42", sql), false);

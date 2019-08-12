@@ -12,6 +12,13 @@ interface LocStrings {
     invalid_chan: string;
     paramBoolSet: string;
 
+    error_no_args_command: string;
+    error_text_channel_not_found: string;
+    error_vocal_channel_not_found: string;
+    error_chan_general: string;
+    error_vocal_channel_rights: string;
+
+    initWelcome: string;
     langPrompt: string;
     prefixPrompt: string;
     adminRolePrompt: string;

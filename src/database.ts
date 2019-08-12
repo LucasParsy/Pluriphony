@@ -25,7 +25,7 @@ export default class DbUtils {
         createSingleTable({
             name: "servers",
             command: "CREATE table servers (id INTEGER PRIMARY KEY, name TEXT, prefix TEXT, lang TEXT, admRoles TEXT, modRoles TEXT," +
-                " vocChans TEXT, botChan TEXT, rateSpeaker INTEGER , topSpeaker INTEGER, statTotComm INTEGER," +
+                " vocChan TEXT, botChan TEXT, rateSpeaker INTEGER , topSpeaker INTEGER, statTotComm INTEGER," +
                 " statMaxWaitlist INTEGER, left INTEGER DEFAULT 0 CHECK (rateSpeaker IN (0,1) AND topSpeaker IN (0,1) AND left IN (0,1)));",
             sql: sql
         });
