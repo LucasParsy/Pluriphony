@@ -29,6 +29,10 @@ interface LocStrings {
     topSpeakerPrompt: string;
     endedInit: string;
     deletingTable: string;
+    helpPrompt: string,
+    help_title: string,
+    help_admin_commands_title: string;
+    configure_help: string;
 
     command_admin_reserved: string;
     command_not_found: string;
@@ -36,6 +40,14 @@ interface LocStrings {
     command_create_poll: string;
     command_add_poll_choice: string;
     command_del_poll_choice: string;
+    command_set_lang: string;
+    command_set_prefix: string;
+    command_set_admin_roles: string;
+    command_set_mod_roles: string;
+    command_set_voc_chan: string;
+    command_set_bot_chan: string;
+    command_configure: string;
+    command_help : string,
 
     debate_title: string;
     debate_subtitle_speaking_time: string;

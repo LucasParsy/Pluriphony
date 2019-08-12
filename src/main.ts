@@ -97,13 +97,13 @@ client.on('message', msg => {
                     if (!(msg.member && msg.member.hasPermission(Discord.Permissions.FLAGS.MANAGE_GUILD!)) &&
                         !(msg.member && Utils.userHasRole(guild.admRoles, msg.member.roles.array())))
                         return showInvalidRightsCommand(CommandName, msg, guild);
-                    Commands.adminC[title](commandArray.slice(1), msg, sql);
+                    Commands.adminC[title].callback(commandArray.slice(1), msg, guild);
                     return;
                 }
 
                 if (!Commands.userC.hasOwnProperty(title))
                     return showInvalidCommand(CommandName, msg, guild);
-                Commands.userC[title](commandArray.slice(1), msg, sql);
+                Commands.userC[title].callback(commandArray.slice(1), msg, guild);
             } else if ((msg.content).replace(/ /g, '') === "pyconfigure" &&
                 msg.member && msg.member.hasPermission(Discord.Permissions.FLAGS.MANAGE_GUILD!)) {
                 addUserToInit(msg, sql, guilds).then();
