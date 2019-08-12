@@ -32,6 +32,39 @@ export default class Utils {
     }
 
     /*
+    @brief: a method to send error message. voluntarily very error redundant
+    @param {string} the message to send
+    @param [Discord.user} the user to reply directly for error (best case)
+    @param {Discord.TextChannel} the channel to which send back the response
+    @param {Server} the server to send a message on general channel if all fails
+     */
+    static async panicError(message: string, originalMessage: Discord.Message, channel?: Discord.TextChannel, guild?: Server) {
+        if (originalMessage)
+            try {
+                let nms = await originalMessage.reply(message) as Message;
+                originalMessage.delete(60 * 1000);
+                nms.delete(60 * 1000);
+                return;
+            } catch (e) {
+            }
+        if (channel) {
+            try {
+                let msg = await channel.send(message) as Message;
+                msg.delete(1000 * 60);
+                return;
+            } catch (e) {
+            }
+        }
+        if (guild) {
+            let chan = Utils.getFirstTextChannel(guild.guild);
+            if (chan != null) {
+                let msg = await chan.send(message) as Message;
+                msg.delete(1000 * 60);
+            } else
+                console.log("c'est la turboMerde! serveur" + guild.name + ":\n" + message);
+        } else
+            console.log("how did we get here? " + message);
+    }
 
     static getLetterEmoji(letter: number) {
         return (":regional_indicator_" + String.fromCharCode(97 + letter) + ":")
