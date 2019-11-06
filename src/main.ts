@@ -1,4 +1,4 @@
-import Discord, {Guild, Message, TextChannel} from "discord.js";
+import Discord, {Guild, GuildMember, Message, TextChannel} from "discord.js";
 import SQLite from "better-sqlite3";
 
 import Server from "./server";
@@ -42,6 +42,16 @@ function checkGuildInitialized(guild: Discord.Guild) {
     }
     return false;
 }
+
+client.on('voiceStateUpdate', (oldM: GuildMember, newM: GuildMember) => {
+    if (oldM.voiceChannel == newM.voiceChannel && oldM.mute != newM.mute)
+        console.log(`user ${newM.displayName} has ${newM.mute ? "muted" : "unmuted"}`);
+    else if (oldM.voiceChannel == undefined && newM.voiceChannel != undefined)
+        console.log(`user ${newM.displayName} joined ${newM.voiceChannel.name}`);
+    else if (newM.voiceChannel == undefined)
+        console.log(`user ${newM.displayName} left ${oldM.voiceChannel.name}`);
+    //oldMember.mute;
+});
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);

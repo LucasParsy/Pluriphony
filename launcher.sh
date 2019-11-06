@@ -3,6 +3,11 @@
 
 startBot()
 {
+    if [[ ! -f "token.json" ]]; then
+	>&2 echo "please create a valid 'token.json' file"
+	exit 1
+    fi
+
     if [[ ! -d "db" ]]; then
         mkdir db
     fi
