@@ -49,7 +49,7 @@ const tableCount = sql.prepare("SELECT count(*) FROM sqlite_master WHERE type='t
 assert.strictEqual(tableCount, 3);
 assert.strictEqual(DbUtils.isServerInDB("42", sql), false);
 // @ts-ignore
-const testServer = new Server(sql, guild, "py", "fr", ["1", "2"], ["3", "4"], "5", "7", true, true);
+const testServer = new Server(sql, guild, "py", "fr", ["1", "2"], ["3", "4"], "5", "6", "7", true, true);
 assert(DbUtils.isServerInDB("42", sql));
 
 const sameServer = new Server(sql, guild);

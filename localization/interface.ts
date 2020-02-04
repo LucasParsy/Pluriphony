@@ -25,6 +25,7 @@ interface LocStrings {
     modRolePrompt: string;
     vocChanPrompt: string;
     botChanPrompt: string;
+    waitChanPrompt: string;
     rateSpeakerPrompt: string;
     topSpeakerPrompt: string;
     endedInit: string;

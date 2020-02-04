@@ -22,6 +22,7 @@
     "adminRolePrompt": "définir les rôles qui pourront modifier les paramètres du bot\n séparez les avec ',',. ex: 'adminAutogéré, modoDuSwag'\n ne mettez pas de virgules dans vos noms de rôles svp!",
     "modRolePrompt": "définir les rôles qui seront modérateurs dans vos channels vocaux\n séparez les avec ',',. ex: 'adminAutogéré, modoDuSwag'\n ne mettez pas de virgules dans vos noms de rôles svp!",
     "vocChanPrompt" : "définir le nom du channel vocal que le bot va surveiller \n ex: '#vocalDebat'",
+    "waitChanPrompt" : "définir le nom du channel vocal d'attente\n ex: '#fileAttente'",
     "botChanPrompt": "définir le nom du channel ou le bot enverra ces messages, comme la file d'attente\n Le channel va etre crée si il n'existe pas encore\n ex: 'bot_du_débat'",
     "rateSpeakerPrompt": "Voulez vous que le public puisse donner un avis sur un orateur après être passé à l'antenne? \no(ui) ou n(on)",
     "topSpeakerPrompt": "Voulez vous une commande pour lister les personnes les plus actives sur le channel vocal?\no(ui) ou n(on)",
@@ -62,5 +63,11 @@
     "waitlist_nobody_waiting_subtitle": "n'hésitez pas à la rejoindre \uD83D\uDE03",
 
     "waitlist_bottom_help_title": "Vous aussi rejoignez la file d'attente en réagissant avec :arrow_up: !",
-    "waitlist_bottom_help_subtitle": "passez votre tour avec :raised_hand:, et quittez là avec :x:"
+    "waitlist_bottom_help_subtitle": "passez votre tour avec :raised_hand:, et quittez là avec :x:",
+
+    "error_text_channel_no_perm": "le bot n'a pas la permission pour envoyer des messages sur ce channel!",
+    "error_voice_channel_no_perm": "le bot n'a pas la permission pour se connecter à ce channel vocal!",
+    "warning_voice_channel_no_mute_perm": "Attention: le bot n'a pas la permission pour couper le micro des utilisateurs dans la file d'attente!",
+    "warning_voice_channel_no_move_perm": "Attention: le bot n'a pas la permission pour bouger le micro des utilisateurs dans la file d'attente!",
+    "warning_channel_add_perm": "Rajoutez à Pluriphony cette permission pour qu'il fonctionne correctement!"
 }

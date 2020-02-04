@@ -1,4 +1,4 @@
-import Discord, {Guild, GuildMember, Message, TextChannel} from "discord.js";
+import Discord, {CollectorFilter, Guild, GuildMember, Message, ReactionCollector, TextChannel} from "discord.js";
 import SQLite from "better-sqlite3";
 
 import Server from "./server";
@@ -7,6 +7,9 @@ import Utils from "./utils";
 import DbUtils from './database.js';
 import Commands from './commandsList';
 import path from "path";
+import WaitlistReactions from "./WaitlistReactions";
+import WaitlistEmbedUI from "./WaitlistEmbedUI";
+import {WaitingStatus, WaitlistUserInfo} from "./WaitlistUserInfo";
 
 const client = new Discord.Client();
 const tableName = path.join(__dirname, '..', 'db', '../db/table.sqlite');
@@ -88,7 +91,40 @@ function showInvalidCommand(command: string, msg: Message, guild: Server) {
 }
 
 
+async function testMethod(msg: Discord.Message) {
+    if (msg.content.startsWith("test")) {
+        let author = msg.author;
+        let channel = msg.channel as TextChannel;
+        let nms : Discord.Message | null = null;
+
+        let guild = guilds.get(msg.guild.id)!;
+        let chan = guild.guild.client.channels.get(guild.botChan);
+        if (chan == undefined || !(chan instanceof TextChannel))
+            return Utils.panicError(Utils.fillTemplateString(guild.lang.error_text_channel_not_found, {w: guild.prefix}) , msg, channel, guild);
+
+        try {
+           nms = await chan.send("hello") as Discord.Message;
+        } catch (e) {
+            console.log(e);
+            return Utils.panicError(Utils.fillTemplateString(guild.lang.error_chan_general, {w: channel.name}), msg, channel, guild);
+        }
+
+        let testI = 0;
+        setInterval(async function () {
+            if (nms) {
+                if (nms.deleted)
+                    nms = await (chan!! as TextChannel).send("you tried to erase me, you punk? " + testI) as Message;
+                else
+                    await nms.edit("world " + testI);
+                testI++
+            }
+        }, 15 * 1000);
+    }
+}
+
 client.on('message', msg => {
+        testMethod(msg);
+
         if (msg.guild) {
             //console.log(msg.guild.roles.find("name", "notExisting"));
             //console.log(msg.guild.roles.find("name", "modoAutogéré"));

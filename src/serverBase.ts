@@ -2,6 +2,7 @@ import SQLite from "better-sqlite3";
 import Discord from "discord.js";
 
 import Utils from "./utils";
+import {Debate} from "./Waitlist";
 
 interface langTableInt {
     [index: string]: LocStrings
@@ -25,9 +26,11 @@ export default class ServerBase {
     public admRoles!: Array<string>;
     public modRoles!: Array<string>;
     public vocChan!: string;
+    public waitChan!: string;
     public botChan!: string;
     public rateSpeaker!: boolean;
     public topSpeaker!: boolean;
+    public debates: Array<Debate> = [];
 
     private langName: string = "en";
 
@@ -48,19 +51,19 @@ export default class ServerBase {
     constructor(sql: SQLite.Database, guild: Discord.Guild);
     constructor(sql: SQLite.Database, guild: Discord.Guild, prefix: string, lang: string,
                 admRoles: Array<string>, modRoles: Array<string>, vocChan: string,
-                botChan: string, rateSpeaker: boolean, topSpeaker: boolean);
+                botChan: string, waitChan: string, rateSpeaker: boolean, topSpeaker: boolean);
 
 
     constructor(sql: SQLite.Database, guild: Discord.Guild, prefix?: string, lang?: string,
                 admRoles?: Array<string>, modRoles?: Array<string>, vocChan?: string,
-                botChan?: string, rateSpeaker?: boolean, topSpeaker?: boolean) {
-        this._constructorReCallable(sql, guild, prefix, lang, admRoles, modRoles, vocChan, botChan, rateSpeaker, topSpeaker)
+                botChan?: string, waitChan?: string, rateSpeaker?: boolean, topSpeaker?: boolean) {
+        this._constructorReCallable(sql, guild, prefix, lang, admRoles, modRoles, vocChan, waitChan, botChan, rateSpeaker, topSpeaker)
     }
 
 
     private _constructorReCallable(sql: SQLite.Database, guild: Discord.Guild, prefix?: string, lang?: string,
                                    admRoles?: Array<string>, modRoles?: Array<string>, vocChan?: string,
-                                   botChan?: string, rateSpeaker?: boolean, topSpeaker?: boolean) {
+                                   botChan?: string, waitChan?: string, rateSpeaker?: boolean, topSpeaker?: boolean) {
         this.sql = sql;
         this.guild = guild;
         this.id = guild.id;
@@ -70,9 +73,9 @@ export default class ServerBase {
         if (prefix === undefined)
             return (this._constructorWithDB(sql));
 
-        const command = sql.prepare("INSERT INTO servers VALUES(?, ?, ?, ?, ?, ?, ?, ?, ? , ?, 0, 0, 0);");
+        const command = sql.prepare("INSERT INTO servers VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?, 0, 0, 0);");
         command.run(guild.id, guild.name, prefix, lang, admRoles!.toString(), modRoles!.toString(),
-            vocChan!, botChan!, rateSpeaker ? "1" : "0", topSpeaker ? "1" : "0");
+            vocChan!, botChan!, waitChan!, rateSpeaker ? "1" : "0", topSpeaker ? "1" : "0");
 
 
         this.prefix = prefix;
@@ -81,6 +84,7 @@ export default class ServerBase {
         this.admRoles = admRoles!;
         this.modRoles = modRoles!;
         this.vocChan = vocChan!;
+        this.waitChan = waitChan!;
         this.botChan = botChan!;
         this.rateSpeaker = rateSpeaker!;
         this.topSpeaker = topSpeaker!;
@@ -101,6 +105,7 @@ export default class ServerBase {
         this.admRoles = res.admRoles.split(',').map(String);
         this.modRoles = res.modRoles.split(',').map(String);
         this.vocChan = res.vocChan; //res.vocChan.split(',').map(Number);
+        this.waitChan =  res.waitChan;
         this.botChan = res.botChan;
         this.rateSpeaker = res.rateSpeaker === 1;
         this.topSpeaker = res.topSpeaker === 1;
@@ -207,6 +212,10 @@ export default class ServerBase {
         return await this._setChan(str, chan, "vocChan", "voice", false)
     }
 
+    async setWaitChan(str: string, chan: TextChan) {
+        return await this._setChan(str, chan, "waitChan", "voice", true)
+    }
+
     async setBotChan(str: string, chan: TextChan) {
         return await this._setChan(str.toLowerCase(), chan, "botChan", "text", true)
     }
@@ -229,6 +238,6 @@ export default class ServerBase {
 
     completeInit() {
         this._constructorReCallable(this.sql, this.guild, this.prefix, this.langName, this.admRoles, this.modRoles,
-            this.vocChan, this.botChan, this.rateSpeaker, this.topSpeaker);
+            this.vocChan, this.botChan, this.waitChan, this.rateSpeaker, this.topSpeaker);
     }
 }

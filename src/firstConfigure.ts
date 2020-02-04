@@ -30,9 +30,9 @@ export async function addUserToInit(msg: Discord.Message, sql: SQLite.Database, 
 
     let step = 0;
     const methods = ["setLang", "setPrefix", "setAdminRoles", "setModRoles",
-        "setVocChan", "setBotChan", "setRateSpeaker", "setTopSpeaker"];
+        "setVocChan", "setWaitChan", "setBotChan", "setRateSpeaker", "setTopSpeaker"];
     const prompts = <Array<string>>["langPrompt", "prefixPrompt", "adminRolePrompt", "modRolePrompt",
-        "vocChanPrompt", "botChanPrompt", "rateSpeakerPrompt", "topSpeakerPrompt"];
+        "vocChanPrompt", "waitChanPrompt", "botChanPrompt", "rateSpeakerPrompt", "topSpeakerPrompt"];
 
     msg.delete();
     await channel.send(server.lang.initWelcome);
