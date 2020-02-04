@@ -1,0 +1,8 @@
+node_modules/
+npm-debug.log
+launcher.sh
+README.md
+LICENSE
+.git/
+.idea/
+mock/

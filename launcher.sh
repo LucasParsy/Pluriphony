@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+docker_launch()
+{
+    #run with sudo if dockerd needs it
+    #dockerd
+
+    #run once too build, rerun for update
+    docker build -t pluriphony .
+
+    docker run -p 49160:8080 -d pluriphony
+}
 
 startBot()
 {
@@ -7,10 +17,7 @@ startBot()
 	>&2 echo "please create a valid 'token.json' file"
 	exit 1
     fi
-
-    if [[ ! -d "db" ]]; then
-        mkdir db
-    fi
+    mkdir -p db
     tsc
     npm run start
 }
